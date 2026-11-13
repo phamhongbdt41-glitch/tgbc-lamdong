@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thẩm định TGBC – NĐ 154/2025/NĐ-CP (v2)</title>
+<style>
+:root{--navy:#1a3a5c;--navy2:#245080;--gold:#e8a000;--bg:#f4f6f9;--card:#fff;--bdr:#d0d7e0;--tx:#1f2937;--muted:#6b7280;--ok:#16a34a;--warn:#d97706;--err:#dc2626;--info:#2563eb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.5}
+.hdr{background:var(--navy);color:#fff;padding:14px 20px}
+.hdr h1{font-size:17px;font-weight:700}
+.hdr p{font-size:11px;opacity:.7;margin-top:2px}
+.tabs{background:var(--navy2);display:flex;padding:0 14px}
+.tb{color:rgba(255,255,255,.65);background:transparent;border:none;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:500;border-bottom:3px solid transparent}
+.tb.on{color:#fff;border-bottom-color:var(--gold)}
+.tb:hover{color:#fff}
+.wrap{max-width:1200px;margin:0 auto;padding:18px 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:768px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:16px;margin-bottom:14px}
+.ctit{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;padding-bottom:7px;border-bottom:2px solid var(--bdr)}
+.fr{margin-bottom:11px}
+label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:3px}
+input[type=number],input[type=text],select{width:100%;border:1px solid var(--bdr);border-radius:5px;padding:7px 9px;font-size:13px;color:var(--tx);background:#fafbfc}
+input:focus,select:focus{outline:none;border-color:var(--navy);background:#fff}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+@media(max-width:580px){.sg{grid-template-columns:1fr}}
+.si{border:2px solid var(--bdr);border-radius:7px;padding:9px 10px;cursor:pointer;text-align:center}
+.si:hover{border-color:var(--navy2)}
+.si.on{border-color:var(--navy);background:#eef3f9}
+.si-t{font-weight:700;font-size:12px;color:var(--navy)}
+.si-d{font-size:10px;color:var(--muted);margin-top:1px}
+.pl{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.pi{border:1.5px solid var(--bdr);border-radius:5px;padding:8px 11px;cursor:pointer}
+.pi.on{border-color:var(--navy);background:#eef3f9}
+.pi.nomoney{border-color:#f59e0b}
+.pi.nomoney.on{background:#fffbeb;border-color:#d97706}
+.pi-t{font-weight:600;font-size:12px;color:var(--navy)}
+.pi-c{font-size:10px;color:var(--muted);margin-top:2px}
+.btn{padding:9px 18px;border-radius:5px;border:none;cursor:pointer;font-size:13px;font-weight:600}
+.btn-p{background:var(--navy);color:#fff}
+.btn-p:hover{background:var(--navy2)}
+.btn-s{background:#e5e7eb;color:var(--tx)}
+.brow{display:flex;gap:7px;margin-top:14px}
+.sp{font-size:11px;color:var(--ok);font-weight:600;margin-top:3px}
+.al{padding:9px 11px;border-radius:5px;font-size:12px;margin-bottom:9px}
+.al-w{background:#fffbeb;border:1px solid #fcd34d;color:#92400e}
+.al-i{background:#eff6ff;border:1px solid #93c5fd;color:#1e40af}
+.al-e{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b}
+.re{text-align:center;padding:36px 16px;color:var(--muted)}
+.rn{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.rp{font-size:11px;color:var(--muted);margin-bottom:12px}
+.ti{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid #f0f2f5;gap:7px}
+.tl{font-size:12px;flex:1}
+.tb2{font-size:10px;color:var(--muted);display:block}
+.ta{font-size:13px;font-weight:700;text-align:right;white-space:nowrap}
+.ta.ok{color:var(--ok)}
+.ta.z{color:var(--muted)}
+.tot{margin-top:11px;padding:11px 13px;background:var(--navy);color:#fff;border-radius:6px;display:flex;justify-content:space-between;align-items:center}
+.tot-l{font-size:13px;font-weight:600}
+.tot-a{font-size:17px;font-weight:700}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;margin-top:9px}
+.b-ns{background:#dbeafe;color:#1d4ed8}
+.b-dv{background:#fef9c3;color:#854d0e}
+.hid{display:none}
+.hdiv{height:1px;background:var(--bdr);margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--navy);color:#fff;padding:7px 9px;text-align:left}
+td{padding:6px 9px;border-bottom:1px solid var(--bdr);vertical-align:top}
+tr:nth-child(even) td{background:#f8fafc}
+.fs{margin-bottom:18px}
+.ft{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:7px;padding:5px 9px;background:#eef3f9;border-radius:4px}
+@media print{.tabs,.brow,.hdr p{display:none}.wrap{max-width:100%;padding:8px}.grid2{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>🏛 Phần mềm Thẩm định Tinh giản Biên chế</h1>
+  <p>Nghị định 154/2025/NĐ-CP ngày 15/6/2025 · Sở Nội vụ Lâm Đồng · Hiệu lực 16/6/2025 – 31/12/2030</p>
+</div>
+<div class="tabs">
+  <button class="tb on" onclick="tab('t1',this)">📋 Thẩm định hồ sơ</button>
+  <button class="tb" onclick="tab('t2',this)">📖 Điều khoản áp dụng</button>
+  <button class="tb" onclick="tab('t3',this)">🔢 Công thức tính</button>
+</div>
+
+<!-- TAB 1 -->
+<div id="t1" class="wrap">
+<div class="grid2">
+<div>
+  <div class="card">
+    <div class="ctit">👤 Loại đối tượng</div>
+    <div class="sg">
+      <div class="si on" id="ot-cbcc" onclick="setOT('cbcc')"><div class="si-t">CBCC / Viên chức</div><div class="si-d">Điều 6, 7, 8</div></div>
+      <div class="si" id="ot-hdkct_xa" onclick="setOT('hdkct_xa')"><div class="si-t">HĐKCT cấp xã</div><div class="si-d">Điều 9</div></div>
+      <div class="si" id="ot-hdkct_thon" onclick="setOT('hdkct_thon')"><div class="si-t">HĐKCT thôn/TDP</div><div class="si-d">Điều 10</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">📌 Chính sách áp dụng</div>
+    <div class="pl" id="pl"></div>
+  </div>
+  <div class="card">
+    <div class="ctit">ℹ️ Thông tin cá nhân</div>
+    <div class="fr"><label>Họ và tên</label><input type="text" id="f-name" placeholder="Nguyễn Văn A"></div>
+    <div class="fr"><label>Chức danh / Chức vụ</label><input type="text" id="f-pos" placeholder="Chuyên viên"></div>
+    <div class="fr"><label>Cơ quan / Đơn vị</label><input type="text" id="f-unit" placeholder="Phòng Tổ chức cán bộ"></div>
+    <div class="fr" id="vctype-row">
+      <label>Phân loại (ảnh hưởng nguồn kinh phí – Điều 11)</label>
+      <select id="f-vct">
+        <option value="cbcc">Cán bộ, công chức (CBCC)</option>
+        <option value="cbcc_xa">Cán bộ, công chức cấp xã</option>
+        <option value="vc_ns_full">Viên chức – ĐVSN NSNN bảo đảm toàn phần</option>
+        <option value="vc_ns_part">Viên chức – ĐVSN NSNN bảo đảm một phần</option>
+        <option value="vc_tc_tx_dt">Viên chức – ĐVSN tự đảm bảo TX + ĐT</option>
+        <option value="vc_tc_tx">Viên chức – ĐVSN tự đảm bảo chi TX</option>
+      </select>
+    </div>
+  </div>
+  <div class="card" id="luong-card">
+    <div class="ctit">💰 Tiền lương hiện hưởng (tháng liền kề trước TGBC – K1 Điều 5)</div>
+    <div class="fr"><label>Mức lương cơ sở (đồng/tháng)</label><input type="number" id="f-lcb" value="2340000" oninput="calcSal()"></div>
+    <div class="fr"><label>Hệ số lương</label><input type="number" id="f-hsl" step="0.01" placeholder="3.00" oninput="calcSal()"></div>
+    <div class="fr"><label>Phụ cấp chức vụ (hệ số)</label><input type="number" id="f-pccv" step="0.01" placeholder="0.00" oninput="calcSal()"></div>
+    <div class="fr"><label>Phụ cấp thâm niên vượt khung (hệ số)</label><input type="number" id="f-pctnvk" step="0.01" placeholder="0.00" oninput="calcSal()"></div>
+    <div class="fr"><label>Phụ cấp thâm niên nghề (hệ số)</label><input type="number" id="f-pctn" step="0.01" placeholder="0.00" oninput="calcSal()"></div>
+    <div class="fr"><label>Hệ số chênh lệch bảo lưu</label><input type="number" id="f-clbl" step="0.01" placeholder="0.00" oninput="calcSal()"></div>
+    <div id="sal-prev" class="sp"></div>
+    <div class="hdiv"></div>
+    <div class="fr"><label>HOẶC nhập trực tiếp tiền lương tháng (đồng) <span style="color:var(--warn)">[ghi đè tính từ hệ số]</span></label><input type="number" id="f-lmanual" placeholder="Để trống nếu tính từ hệ số trên" oninput="calcSal()"></div>
+  </div>
+  <div class="card hid" id="pc-card">
+    <div class="ctit">💰 Phụ cấp hàng tháng</div>
+    <div class="fr"><label>Mức phụ cấp hàng tháng hiện hưởng (đồng)</label><input type="number" id="f-pc" placeholder="1500000"></div>
+    <div class="fr hid" id="k2-sal-row"><label>Lương CBCC cấp xã trước khi bố trí sang HĐKCT (đồng) – dùng cho Khoản 2</label><input type="number" id="f-lk2" placeholder="Nhập nếu áp dụng Khoản 2"></div>
+  </div>
+  <div class="card" id="ef-card">
+    <div class="ctit" id="ef-tit">📊 Thông tin bổ sung</div>
+    <div id="ef-body"><p style="color:var(--muted);font-size:12px">Vui lòng chọn chính sách trước</p></div>
+  </div>
+  <div class="brow">
+    <button class="btn btn-p" onclick="calc()">🔢 Tính chế độ</button>
+    <button class="btn btn-s" onclick="clrForm()">↺ Làm mới</button>
+    <button class="btn btn-s" onclick="window.print()">🖨 In phiếu</button>
+  </div>
+</div>
+<div>
+  <div class="card">
+    <div class="ctit">📊 Kết quả thẩm định</div>
+    <div id="res"><div class="re"><div style="font-size:38px;margin-bottom:10px">📋</div>Nhập thông tin và bấm <strong>Tính chế độ</strong></div></div>
+  </div>
+  <div class="card">
+    <div class="ctit">💾 Hồ sơ đã thẩm định <button class="btn btn-s" style="padding:3px 9px;font-size:11px;float:right" onclick="clrHist()">Xóa tất cả</button></div>
+    <div id="hist"></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- TAB 2 -->
+<div id="t2" class="wrap hid">
+<div class="card"><div class="ctit">✅ Điều 2 – Đối tượng được áp dụng TGBC</div>
+<table><tr><th>Điểm</th><th>Điều kiện</th></tr>
+<tr><td>a</td><td>Dôi dư do sắp xếp tổ chức bộ máy, đơn vị hành chính</td></tr>
+<tr><td>b</td><td>Không hoàn thành nhiệm vụ được giao 02 năm liên tiếp gần nhất</td></tr>
+<tr><td>c</td><td>Không đạt tiêu chuẩn chức danh, vị trí việc làm theo quy định</td></tr>
+<tr><td>d</td><td>Dôi dư do đơn vị giải thể, phá sản, chuyển đổi hình thức hoạt động</td></tr>
+<tr><td>đ</td><td>Mắc bệnh hiểm nghèo không còn khả năng hoàn thành nhiệm vụ</td></tr>
+<tr><td>e</td><td>Có năng lực hạn chế không thể bố trí việc khác</td></tr>
+<tr><td>g</td><td>Dôi dư do không tuyển dụng lại sau nghỉ hưởng chế độ BH</td></tr>
+<tr><td>h</td><td>Dôi dư do các trường hợp khác theo quy định</td></tr>
+</table></div>
+<div class="card"><div class="ctit">❌ Điều 4 – Trường hợp KHÔNG được giải quyết TGBC</div>
+<table><tr><th>Trường hợp</th><th>Mô tả</th></tr>
+<tr><td>Nghỉ thai sản / nuôi con</td><td>Đang nghỉ thai sản, nghỉ chế độ khi sinh con, hoặc nuôi con dưới 36 tháng tuổi</td></tr>
+<tr><td>Đang xem xét kỷ luật / truy tố</td><td>Đang trong thời gian bị xem xét kỷ luật, bị truy tố, điều tra, truy nã</td></tr>
+</table></div>
+<div class="card"><div class="ctit">📋 Điều 5 – Quy định chung về cách tính</div>
+<table><tr><th>Khoản</th><th>Nội dung</th></tr>
+<tr><td>K1 – Tiền lương</td><td>= (hệ số lương + PC chức vụ + PC TNVK + PC TN nghề + hệ số CLBL) × mức lương cơ sở. Lấy tháng liền kề trước khi TGBC</td></tr>
+<tr><td>K7 – Làm tròn</td><td>Áp dụng cho Điều 6, 7, 8, K1 Điều 9, K1 Điều 10: 1–6 tháng lẻ → 0,5 năm; 7–11 tháng lẻ → 1 năm. 0 tháng lẻ → giữ nguyên</td></tr>
+</table></div>
+<div class="card"><div class="ctit">ℹ️ Điều 11 – Nguồn kinh phí</div>
+<table><tr><th>Đối tượng</th><th>Nguồn kinh phí</th></tr>
+<tr><td>CBCC, CBCC cấp xã, HĐKCT cấp xã, thôn/TDP</td><td>Ngân sách nhà nước (NSNN) cấp</td></tr>
+<tr><td>Viên chức trong ĐVSN NSNN bảo đảm toàn phần hoặc một phần</td><td>NSNN cấp</td></tr>
+<tr><td>Viên chức trong ĐVSN tự đảm bảo chi TX + ĐT; hoặc tự đảm bảo chi TX</td><td>Nguồn thu hoạt động sự nghiệp của đơn vị</td></tr>
+</table></div>
+</div>
+
+<!-- TAB 3 -->
+<div id="t3" class="wrap hid">
+<div class="fs"><div class="ft">Điều 6 – Nghỉ hưu trước tuổi (CBCC / Viên chức)</div>
+<table><tr><th>Khoản</th><th>Điều kiện</th><th>TC nghỉ sớm</th><th>TC BHXH</th></tr>
+<tr><td><b>K1</b></td><td>Phụ lục II; sớm 2–5 năm; ≥15 năm NN/KV 0,7; đủ BHXH hưởng lương hưu</td><td>Số năm sớm (đã làm tròn K7Đ5) × 5T × lương</td><td>BHXH ≥20n: 5T+(N-20)×0,5T × lương<br>15≤N&lt;20: 5T×lương<br>N&lt;15: Không có</td></tr>
+<tr><td><b>K2</b></td><td>Phụ lục I; sớm 2–5 năm; đủ BHXH hưởng lương hưu</td><td>Số năm sớm (đã làm tròn) × 5T × lương</td><td>Như K1</td></tr>
+<tr style="background:#fffbeb"><td><b>K3</b></td><td>Phụ lục II; sớm &lt;2 năm; ≥15 năm NN/KV 0,7; đủ BHXH</td><td colspan="2" style="color:var(--warn);font-weight:700">⚠ KHÔNG có TC tiền – Chỉ: "không bị trừ tỷ lệ % lương hưu"</td></tr>
+<tr style="background:#fffbeb"><td><b>K4</b></td><td>Phụ lục I; sớm &lt;2 năm; đủ BHXH hưởng lương hưu</td><td colspan="2" style="color:var(--warn);font-weight:700">⚠ KHÔNG có TC tiền – Chỉ: "không bị trừ tỷ lệ % lương hưu"</td></tr>
+</table></div>
+<div class="fs"><div class="ft">Điều 7 – Chuyển sang tổ chức không hưởng lương NSNN</div>
+<table><tr><th>Thành phần TC</th><th>Công thức</th></tr>
+<tr><td>TC hỗ trợ</td><td>3 tháng × tiền lương</td></tr>
+<tr><td>TC BHXH</td><td>Số năm đóng BHXH (đã làm tròn K7Đ5) × 0,5 tháng × tiền lương</td></tr>
+<tr><td colspan="2" style="color:var(--warn)">⚠ Không áp dụng cho người còn ≤3 năm đến tuổi hưu → phải dùng Điều 6 K3/K4</td></tr>
+</table></div>
+<div class="fs"><div class="ft">Điều 8 – Chính sách thôi việc</div>
+<table><tr><th>Khoản</th><th>Thành phần</th><th>Công thức</th></tr>
+<tr><td rowspan="3"><b>K1</b><br>Thôi việc ngay</td><td>TC tìm việc</td><td>3 tháng × tiền lương</td></tr>
+<tr><td>TC BHXH</td><td>Số năm đóng BHXH (đã làm tròn) × 1,5 tháng × tiền lương</td></tr>
+<tr><td>Bảo lưu BHXH</td><td>Bảo lưu BHXH bắt buộc HOẶC hưởng BHXH 1 lần (ghi chú)</td></tr>
+<tr><td rowspan="4"><b>K2</b><br>Sau học nghề<br>(dưới 45 tuổi)</td><td>Hỗ trợ trong học (đơn vị chi trả)</td><td>Lương + BHXH/BHYT/BHTN, tối đa 6 tháng (đơn vị chi)</td></tr>
+<tr><td>TC học phí</td><td>Thực tế chi phí học nghề, tối đa 6 tháng lương</td></tr>
+<tr><td>TC tìm việc (sau học)</td><td>3 tháng × tiền lương tại thời điểm đi học</td></tr>
+<tr><td>TC BHXH</td><td>Số năm đóng BHXH (đã làm tròn) × 0,5 tháng × tiền lương</td></tr>
+</table></div>
+<div class="fs"><div class="ft">Điều 9 K1 (HĐKCT cấp xã) và Điều 10 K1 (HĐKCT thôn/TDP) – Chưa đến tuổi hưu</div>
+<table><tr><th>Trường hợp</th><th>TC1</th><th>TC2</th><th>TC3 (tìm việc)</th></tr>
+<tr><td><b>a)</b> Dưới 5 năm công tác</td><td>0,8 × PC × <em>tổng tháng CT thực tế</em> (không làm tròn)</td><td>1,5 × PC × số năm CT (đã làm tròn K7Đ5)</td><td>3 × PC</td></tr>
+<tr><td><b>b)</b> ≥5 năm CT + còn &lt;5 năm đến hưu</td><td>0,8 × PC × <em>tháng nghỉ sớm thực tế</em> (không làm tròn)</td><td>1,5 × PC × số năm CT (đã làm tròn)</td><td>3 × PC</td></tr>
+<tr><td><b>c)</b> ≥5 năm CT + còn ≥5 năm đến hưu</td><td>0,8 × PC × <b>60</b> (cố định)</td><td>1,5 × PC × số năm CT (đã làm tròn)</td><td>3 × PC</td></tr>
+<tr><td><b>K3:</b> Đủ tuổi hưu hoặc đang hưởng hưu trí</td><td colspan="3"><b>TC = 15 tháng × phụ cấp hàng tháng</b> (một lần)</td></tr>
+</table>
+<p style="font-size:11px;color:var(--muted);margin-top:7px">📌 K2 (CBCC cấp xã bố trí sang HĐKCT): công thức như K1 nhưng "PC" thay bằng lương CBCC cấp xã trước khi bố trí</p>
+</div>
+</div>
+
+<script>
+var S = { ot: 'cbcc', pol: null };
+
+function tab(id, el) {
+  document.querySelectorAll('.wrap').forEach(function(e){e.classList.add('hid');});
+  document.querySelectorAll('.tb').forEach(function(e){e.classList.remove('on');});
+  document.getElementById(id).classList.remove('hid');
+  el.classList.add('on');
+}
+
+var POLS = {
+  cbcc: [
+    {id:'d6k1',t:'Điều 6 K1 – Nghỉ hưu sớm 2–5 năm (Phụ lục II – nặng nhọc/khu vực)',c:'Phụ lục II NĐ 135; sớm 2–5 năm; có ≥15 năm NN/KV 0,7; đủ BHXH hưởng lương hưu',nm:false},
+    {id:'d6k2',t:'Điều 6 K2 – Nghỉ hưu sớm 2–5 năm (Phụ lục I – bình thường)',c:'Phụ lục I NĐ 135; sớm 2–5 năm; đủ BHXH hưởng lương hưu',nm:false},
+    {id:'d6k3',t:'Điều 6 K3 – Nghỉ hưu sớm dưới 2 năm (Phụ lục II) ⚠ Không có TC tiền',c:'Phụ lục II; sớm dưới 2 năm; ≥15 năm NN/KV 0,7; đủ BHXH. Quyền lợi DUY NHẤT: không trừ tỷ lệ % lương hưu',nm:true},
+    {id:'d6k4',t:'Điều 6 K4 – Nghỉ hưu sớm dưới 2 năm (Phụ lục I) ⚠ Không có TC tiền',c:'Phụ lục I; sớm dưới 2 năm; đủ BHXH. Quyền lợi DUY NHẤT: không trừ tỷ lệ % lương hưu',nm:true},
+    {id:'d7',t:'Điều 7 – Chuyển sang tổ chức không hưởng lương NSNN',c:'Chuyển sang làm việc tại tổ chức không hưởng KP thường xuyên từ NSNN; còn trên 3 năm đến tuổi hưu',nm:false},
+    {id:'d8k1',t:'Điều 8 K1 – Thôi việc ngay',c:'Chưa đến tuổi hưu; không đủ điều kiện nghỉ hưu trước tuổi theo Điều 6',nm:false},
+    {id:'d8k2',t:'Điều 8 K2 – Thôi việc sau học nghề (dưới 45 tuổi)',c:'Dưới 45 tuổi; đảm nhận công việc không phù hợp trình độ; cơ quan tạo điều kiện đi học nghề',nm:false},
+  ],
+  hdkct_xa: [
+    {id:'d9k1a',t:'Điều 9 K1(a) – Dưới 5 năm CT, chưa đến tuổi hưu',c:'Có dưới 5 năm công tác; chưa đến tuổi nghỉ hưu theo Phụ lục I/II NĐ 135',nm:false},
+    {id:'d9k1b',t:'Điều 9 K1(b) – ≥5 năm CT + còn dưới 5 năm đến hưu',c:'Có ≥5 năm công tác; còn dưới 5 năm đến tuổi hưu',nm:false},
+    {id:'d9k1c',t:'Điều 9 K1(c) – ≥5 năm CT + còn ≥5 năm đến hưu',c:'Có ≥5 năm công tác; còn ≥5 năm đến tuổi hưu',nm:false},
+    {id:'d9k2a',t:'Điều 9 K2(a) – CBCC cấp xã bố trí sang HĐKCT, dưới 5 năm CT',c:'CBCC cấp xã do sắp xếp 2023–2025 bố trí sang HĐKCT cấp xã; dưới 5 năm CT; chưa đến hưu. Tính theo lương CBCC cấp xã trước khi bố trí',nm:false},
+    {id:'d9k2b',t:'Điều 9 K2(b) – CBCC cấp xã bố trí sang HĐKCT, ≥5 năm CT + dưới 5 năm đến hưu',c:'CBCC cấp xã bố trí sang HĐKCT; ≥5 năm CT; còn dưới 5 năm đến hưu',nm:false},
+    {id:'d9k2c',t:'Điều 9 K2(c) – CBCC cấp xã bố trí sang HĐKCT, ≥5 năm CT + ≥5 năm đến hưu',c:'CBCC cấp xã bố trí sang HĐKCT; ≥5 năm CT; còn ≥5 năm đến hưu',nm:false},
+    {id:'d9k3',t:'Điều 9 K3 – Đã đủ tuổi hưu hoặc đang hưởng hưu trí',c:'Đã đủ tuổi nghỉ hưu theo Phụ lục I/II, hoặc đang hưởng lương hưu, trợ cấp mất sức LĐ',nm:false},
+  ],
+  hdkct_thon: [
+    {id:'d10k1a',t:'Điều 10 K1(a) – Dưới 5 năm CT, chưa đến tuổi hưu',c:'Có dưới 5 năm công tác; chưa đến tuổi nghỉ hưu',nm:false},
+    {id:'d10k1b',t:'Điều 10 K1(b) – ≥5 năm CT + còn dưới 5 năm đến hưu',c:'Có ≥5 năm công tác; còn dưới 5 năm đến tuổi hưu',nm:false},
+    {id:'d10k1c',t:'Điều 10 K1(c) – ≥5 năm CT + còn ≥5 năm đến hưu',c:'Có ≥5 năm công tác; còn ≥5 năm đến tuổi hưu',nm:false},
+    {id:'d10k2a',t:'Điều 10 K2(a) – CBCC cấp xã bố trí sang HĐKCT thôn/TDP, dưới 5 năm CT',c:'CBCC cấp xã bố trí sang HĐKCT thôn/TDP do sắp xếp 2023–2025; dưới 5 năm CT',nm:false},
+    {id:'d10k2b',t:'Điều 10 K2(b) – CBCC cấp xã bố trí sang HĐKCT thôn/TDP, ≥5 năm CT + dưới 5 năm đến hưu',c:'CBCC cấp xã bố trí sang HĐKCT thôn/TDP; ≥5 năm CT; còn dưới 5 năm đến hưu',nm:false},
+    {id:'d10k2c',t:'Điều 10 K2(c) – CBCC cấp xã bố trí sang HĐKCT thôn/TDP, ≥5 năm CT + ≥5 năm đến hưu',c:'CBCC cấp xã bố trí sang HĐKCT thôn/TDP; ≥5 năm CT; còn ≥5 năm đến hưu',nm:false},
+    {id:'d10k3',t:'Điều 10 K3 – Đã đủ tuổi hưu hoặc đang hưởng hưu trí',c:'Đã đủ tuổi nghỉ hưu, hoặc đang hưởng lương hưu, trợ cấp mất sức LĐ',nm:false},
+  ]
+};
+
+function setOT(ot) {
+  S.ot = ot; S.pol = null;
+  ['cbcc','hdkct_xa','hdkct_thon'].forEach(function(t){document.getElementById('ot-'+t).classList.remove('on');});
+  document.getElementById('ot-'+ot).classList.add('on');
+  var isCbcc = ot==='cbcc';
+  document.getElementById('vctype-row').classList.toggle('hid',!isCbcc);
+  document.getElementById('luong-card').classList.toggle('hid',!isCbcc);
+  document.getElementById('pc-card').classList.toggle('hid',isCbcc);
+  renderPols(); renderEF();
+  document.getElementById('res').innerHTML='<div class="re"><div style="font-size:38px;margin-bottom:10px">📋</div>Chọn chính sách và nhập thông tin</div>';
+}
+
+function renderPols() {
+  var pl=document.getElementById('pl');
+  pl.innerHTML=POLS[S.ot].map(function(p){
+    return '<div class="pi'+(p.nm?' nomoney':'')+'" id="pi-'+p.id+'" onclick="setPol(\''+p.id+'\')">'
+      +'<label style="cursor:pointer"><input type="radio" name="pol" value="'+p.id+'" style="margin-right:5px"><span class="pi-t">'+p.t+'</span></label>'
+      +'<div class="pi-c">'+p.c+'</div></div>';
+  }).join('');
+}
+
+function setPol(id) {
+  S.pol=id;
+  document.querySelectorAll('.pi').forEach(function(e){e.classList.remove('on');});
+  var el=document.getElementById('pi-'+id);
+  if(el) el.classList.add('on');
+  var isK2=id.indexOf('k2')>-1 && id!=='d8k2';
+  var k2row=document.getElementById('k2-sal-row');
+  if(k2row) k2row.classList.toggle('hid',!isK2);
+  renderEF();
+}
+
+function renderEF() {
+  var p=S.pol;
+  var tit=document.getElementById('ef-tit');
+  var body=document.getElementById('ef-body');
+  if(!p){body.innerHTML='<p style="color:var(--muted);font-size:12px">Vui lòng chọn chính sách trước</p>';return;}
+
+  if(p==='d6k1'||p==='d6k2'){
+    tit.textContent='Điều 6 K'+(p==='d6k1'?'1':'2')+' – Thông tin tính chế độ';
+    body.innerHTML='<div class="fr"><label>Số tháng nghỉ sớm so với tuổi hưu (phải 24–60 tháng)</label><input type="number" id="ef-som" min="1" placeholder="Ví dụ: 30 tháng = 2,5 năm sớm"></div>'
+      +'<div class="fr"><label>Tổng số tháng đóng BHXH</label><input type="number" id="ef-bhxh" min="0" placeholder="Ví dụ: 240 = 20 năm"></div>'
+      +(p==='d6k1'?'<div class="fr"><label>Số năm làm nghề nặng nhọc / khu vực 0,7 (phải ≥ 15 năm)</label><input type="number" id="ef-namnn" min="0" step="0.5" placeholder="≥ 15 năm"></div>':'');
+  } else if(p==='d6k3'||p==='d6k4'){
+    tit.textContent='Điều 6 K'+(p==='d6k3'?'3':'4')+' – Xác nhận điều kiện';
+    body.innerHTML='<div class="al al-e">⚠ <b>KHÔNG có trợ cấp bằng tiền.</b> Quyền lợi DUY NHẤT: không bị trừ tỷ lệ % lương hưu khi nghỉ sớm dưới 2 năm.</div>'
+      +'<div class="fr"><label>Số tháng nghỉ sớm (xác nhận phải < 24 tháng)</label><input type="number" id="ef-som" min="1" max="23" placeholder="< 24 tháng"></div>'
+      +'<div class="fr"><label>Tổng số tháng đóng BHXH (xác nhận đủ hưởng lương hưu)</label><input type="number" id="ef-bhxh" min="0" placeholder="Đủ điều kiện hưởng lương hưu"></div>'
+      +(p==='d6k3'?'<div class="fr"><label>Số năm làm nghề nặng nhọc / khu vực 0,7 (phải ≥ 15 năm)</label><input type="number" id="ef-namnn" min="0" step="0.5" placeholder="≥ 15 năm"></div>':'');
+  } else if(p==='d7'){
+    tit.textContent='Điều 7 – Thông tin tính chế độ';
+    body.innerHTML='<div class="al al-i">ℹ Không áp dụng cho người còn ≤3 năm đến tuổi hưu → phải dùng Điều 6 K3/K4.</div>'
+      +'<div class="fr"><label>Tổng số tháng đóng BHXH</label><input type="number" id="ef-bhxh" min="0" placeholder="Ví dụ: 240 = 20 năm"></div>'
+      +'<div class="fr"><label>Số tháng còn lại đến tuổi hưu (để kiểm tra điều kiện)</label><input type="number" id="ef-conlai" min="0" placeholder="Phải > 36 tháng để áp dụng Điều 7"></div>';
+  } else if(p==='d8k1'){
+    tit.textContent='Điều 8 K1 – Thông tin tính chế độ';
+    body.innerHTML='<div class="fr"><label>Tổng số tháng đóng BHXH</label><input type="number" id="ef-bhxh" min="0" placeholder="Ví dụ: 180 = 15 năm"></div>';
+  } else if(p==='d8k2'){
+    tit.textContent='Điều 8 K2 – Thông tin tính chế độ';
+    body.innerHTML='<div class="al al-i">ℹ Chỉ áp dụng cho người <b>dưới 45 tuổi</b>, có sức khỏe, đảm nhận công việc không phù hợp trình độ.</div>'
+      +'<div class="fr"><label>Tuổi hiện tại (phải dưới 45)</label><input type="number" id="ef-tuoi" min="18" max="60" placeholder="Dưới 45 tuổi"></div>'
+      +'<div class="fr"><label>Chi phí học nghề thực tế (đồng) – tối đa 6 tháng lương</label><input type="number" id="ef-hocphi" placeholder="Nhập chi phí khóa học"></div>'
+      +'<div class="fr"><label>Tổng số tháng đóng BHXH</label><input type="number" id="ef-bhxh" min="0" placeholder="Ví dụ: 120 = 10 năm"></div>';
+  } else if(/^d[910]+k[12](a|b|c)$/.test(p)){
+    var dieu=p.startsWith('d9')?'9':'10';
+    var sub=p.slice(-1);
+    var isK2=p.indexOf('k2')>-1;
+    tit.textContent='Điều '+dieu+' K'+(isK2?'2':'1')+'('+sub+') – Thông tin tính chế độ';
+    var extra=(sub==='b'||sub==='c')?'<div class="fr"><label>Số tháng còn lại đến tuổi hưu (tháng thực tế, không làm tròn)</label><input type="number" id="ef-conlai" min="0" placeholder="'+(sub==='b'?'Phải < 60 tháng':'Phải ≥ 60 tháng')+'"></div>':'';
+    body.innerHTML=(isK2?'<div class="al al-i">ℹ Áp dụng Khoản 2: tính theo lương CBCC cấp xã trước khi bố trí (nhập ở ô bên trên).</div>':'')
+      +'<div class="fr"><label>Tổng số tháng công tác (tháng thực tế, không làm tròn)</label><input type="number" id="ef-ct" min="1" placeholder="Ví dụ: 72 = 6 năm"></div>'
+      +extra;
+  } else if(p==='d9k3'||p==='d10k3'){
+    var dieu=p.startsWith('d9')?'9':'10';
+    tit.textContent='Điều '+dieu+' K3 – Xác nhận điều kiện';
+    body.innerHTML='<div class="al al-i">ℹ Người đủ tuổi nghỉ hưu hoặc đang hưởng hưu trí: TC = 15 tháng × phụ cấp hàng tháng hiện hưởng (một lần).</div>';
+  }
+}
+
+function roundYears(totalMonths) {
+  var m=Math.round(totalMonths);
+  var y=Math.floor(m/12);
+  var r=m%12;
+  if(r===0) return y;
+  if(r<=6) return y+0.5;
+  return y+1;
+}
+
+function getSal() {
+  var manual=parseFloat(document.getElementById('f-lmanual').value);
+  if(!isNaN(manual)&&manual>0) return manual;
+  var lcb=parseFloat(document.getElementById('f-lcb').value)||2340000;
+  var hsl=parseFloat(document.getElementById('f-hsl').value)||0;
+  var pccv=parseFloat(document.getElementById('f-pccv').value)||0;
+  var pctnvk=parseFloat(document.getElementById('f-pctnvk').value)||0;
+  var pctn=parseFloat(document.getElementById('f-pctn').value)||0;
+  var clbl=parseFloat(document.getElementById('f-clbl').value)||0;
+  return (hsl+pccv+pctnvk+pctn+clbl)*lcb;
+}
+
+function getPC(isK2) {
+  if(isK2){var lk2=parseFloat(document.getElementById('f-lk2').value);if(!isNaN(lk2)&&lk2>0) return lk2;}
+  return parseFloat(document.getElementById('f-pc').value)||0;
+}
+
+function calcSal() {
+  var manual=parseFloat(document.getElementById('f-lmanual').value);
+  if(!isNaN(manual)&&manual>0){document.getElementById('sal-prev').textContent='Tiền lương: '+fmt(manual)+' đ/tháng (nhập trực tiếp)';return;}
+  var lcb=parseFloat(document.getElementById('f-lcb').value)||2340000;
+  var hsl=parseFloat(document.getElementById('f-hsl').value)||0;
+  if(hsl===0){document.getElementById('sal-prev').textContent='';return;}
+  var pccv=parseFloat(document.getElementById('f-pccv').value)||0;
+  var pctnvk=parseFloat(document.getElementById('f-pctnvk').value)||0;
+  var pctn=parseFloat(document.getElementById('f-pctn').value)||0;
+  var clbl=parseFloat(document.getElementById('f-clbl').value)||0;
+  var sal=(hsl+pccv+pctnvk+pctn+clbl)*lcb;
+  document.getElementById('sal-prev').textContent='Tiền lương tính được: '+fmt(sal)+' đ/tháng';
+}
+
+function fmt(n){return Math.round(n).toLocaleString('vi-VN');}
+function yF(v){return v+' năm';}
+function gv(id){var e=document.getElementById(id);return e?(parseFloat(e.value)||0):0;}
+
+function tcBhxhD6(bhxhMonths,luong) {
+  var ny=roundYears(bhxhMonths);
+  if(ny<15) return {amt:0,note:'BHXH '+ny+' năm (dưới 15 năm) → không có TC BHXH'};
+  if(ny>=20){var amt=(5+(ny-20)*0.5)*luong;return {amt:amt,note:'20 năm đầu × 5T + '+(ny-20)+' năm thứ 21+ × 0,5T = '+yF(5+(ny-20)*0.5)+' lương'};}
+  return {amt:5*luong,note:'15–19 năm BHXH → 5 tháng lương (một lần)'};
+}
+
+function getFunding() {
+  if(S.ot!=='cbcc') return {l:'Ngân sách nhà nước (NSNN)',c:'b-ns'};
+  var vct=document.getElementById('f-vct').value;
+  if(vct==='vc_tc_tx_dt'||vct==='vc_tc_tx') return {l:'Nguồn thu HĐSN của đơn vị (Điều 11 K2)',c:'b-dv'};
+  return {l:'Ngân sách nhà nước (NSNN)',c:'b-ns'};
+}
+
+function calc() {
+  var p=S.pol;
+  if(!p){alert('Vui lòng chọn chính sách áp dụng!');return;}
+  var name=document.getElementById('f-name').value||'(Chưa nhập tên)';
+  var pos=document.getElementById('f-pos').value||'';
+  var unit=document.getElementById('f-unit').value||'';
+  var warns=[],items=[],total=0,noMoney=false,pLabel='';
+
+  if(p==='d6k1'||p==='d6k2'){
+    var luong=getSal();
+    if(luong<=0){alert('Vui lòng nhập tiền lương!');return;}
+    var som=gv('ef-som'),bhxh=gv('ef-bhxh'),namNN=(p==='d6k1'?gv('ef-namnn'):999);
+    if(som<24) warns.push('⚠ Số tháng nghỉ sớm phải ≥ 24 tháng (2 năm) để áp dụng K1/K2. Dưới 2 năm → dùng K3/K4.');
+    if(som>60) warns.push('⚠ Số tháng nghỉ sớm vượt 60 tháng (5 năm). K1/K2 chỉ áp dụng sớm 2–5 năm.');
+    if(p==='d6k1'&&namNN<15) warns.push('⚠ Điều 6 K1 yêu cầu ≥ 15 năm làm nghề nặng nhọc / khu vực 0,7.');
+    var somY=roundYears(som),bhxhY=roundYears(bhxh);
+    var tcNS=somY*5*luong,tcBH=tcBhxhD6(bhxh,luong);
+    total=tcNS+tcBH.amt;
+    pLabel='Điều 6 Khoản '+(p==='d6k1'?'1':'2')+' – Nghỉ hưu trước tuổi';
+    items=[
+      {l:'Không bị trừ tỷ lệ % lương hưu',b:'Điều 6 K'+(p==='d6k1'?'1':'2')+' điểm a',a:null,n:'Quyền lợi phi tiền mặt'},
+      {l:'TC nghỉ sớm = '+yF(somY)+' × 5T × lương',b:'Điều 6 K'+(p==='d6k1'?'1':'2')+' điểm b',a:tcNS,n:som+' tháng → '+yF(somY)+' (làm tròn K7Đ5)'},
+      {l:'TC BHXH ('+yF(bhxhY)+')',b:'Điều 6 K'+(p==='d6k1'?'1':'2')+' điểm c',a:tcBH.amt,n:tcBH.note},
+    ];
+
+  } else if(p==='d6k3'||p==='d6k4'){
+    var som=gv('ef-som'),namNN=(p==='d6k3'?gv('ef-namnn'):999);
+    if(som>=24) warns.push('⚠ Số tháng sớm ≥ 24 → không phải K3/K4, nên kiểm tra lại (nên dùng K1/K2).');
+    if(p==='d6k3'&&namNN<15) warns.push('⚠ Điều 6 K3 yêu cầu ≥ 15 năm làm nghề nặng nhọc / khu vực 0,7.');
+    noMoney=true; total=0;
+    pLabel='Điều 6 Khoản '+(p==='d6k3'?'3':'4')+' – Nghỉ hưu sớm dưới 2 năm';
+    items=[{l:'Không bị trừ tỷ lệ % lương hưu',b:'Điều 6 K'+(p==='d6k3'?'3':'4'),a:null,n:'Quyền lợi DUY NHẤT – không có TC tiền mặt'}];
+
+  } else if(p==='d7'){
+    var luong=getSal();
+    if(luong<=0){alert('Vui lòng nhập tiền lương!');return;}
+    var bhxh=gv('ef-bhxh'),conlai=gv('ef-conlai');
+    if(conlai>0&&conlai<=36) warns.push('⚠ Người còn ≤3 năm đến tuổi hưu KHÔNG được áp dụng Điều 7! Phải dùng Điều 6 K3 hoặc K4.');
+    var bhxhY=roundYears(bhxh);
+    var tc1=3*luong,tc2=bhxhY*0.5*luong;
+    total=tc1+tc2; pLabel='Điều 7 – Chuyển sang tổ chức không hưởng lương NSNN';
+    items=[
+      {l:'TC hỗ trợ = 3 tháng × lương',b:'Điều 7 điểm a',a:tc1,n:''},
+      {l:'TC BHXH = '+yF(bhxhY)+' × 0,5T × lương',b:'Điều 7 điểm b',a:tc2,n:bhxh+' tháng → '+yF(bhxhY)+' (làm tròn K7Đ5)'},
+    ];
+
+  } else if(p==='d8k1'){
+    var luong=getSal();
+    if(luong<=0){alert('Vui lòng nhập tiền lương!');return;}
+    var bhxh=gv('ef-bhxh'),bhxhY=roundYears(bhxh);
+    var tc1=3*luong,tc2=bhxhY*1.5*luong;
+    total=tc1+tc2; pLabel='Điều 8 Khoản 1 – Thôi việc ngay';
+    items=[
+      {l:'TC tìm việc = 3 tháng × lương',b:'Điều 8 K1 điểm a',a:tc1,n:''},
+      {l:'TC BHXH = '+yF(bhxhY)+' × 1,5T × lương',b:'Điều 8 K1 điểm b',a:tc2,n:bhxh+' tháng → '+yF(bhxhY)+' (làm tròn K7Đ5)'},
+      {l:'Bảo lưu BHXH bắt buộc HOẶC hưởng BHXH 1 lần',b:'Điều 8 K1 điểm c',a:null,n:'Quyền lựa chọn'},
+    ];
+
+  } else if(p==='d8k2'){
+    var luong=getSal();
+    if(luong<=0){alert('Vui lòng nhập tiền lương!');return;}
+    var tuoi=gv('ef-tuoi'),hocphi=gv('ef-hocphi'),bhxh=gv('ef-bhxh');
+    if(tuoi>=45) warns.push('⚠ Điều 8 K2 chỉ áp dụng cho người DƯỚI 45 tuổi!');
+    var bhxhY=roundYears(bhxh),hpMax=6*luong,tcHP=Math.min(hocphi,hpMax);
+    var tcTV=3*luong,tcBH=bhxhY*0.5*luong;
+    total=tcHP+tcTV+tcBH; pLabel='Điều 8 Khoản 2 – Thôi việc sau học nghề';
+    items=[
+      {l:'Lương + BHXH/BHYT/BHTN trong học nghề (đơn vị chi trả, tối đa 6 tháng)',b:'Điều 8 K2 điểm a',a:null,n:'Đơn vị chi – không là TC trực tiếp cho cá nhân'},
+      {l:'TC học phí = '+fmt(tcHP)+' đ (thực tế '+fmt(hocphi)+' đ; tối đa 6T lương='+fmt(hpMax)+' đ)',b:'Điều 8 K2 điểm b',a:tcHP,n:''},
+      {l:'TC tìm việc = 3 tháng × lương (thời điểm đi học)',b:'Điều 8 K2 điểm c',a:tcTV,n:''},
+      {l:'TC BHXH = '+yF(bhxhY)+' × 0,5T × lương',b:'Điều 8 K2 điểm d',a:tcBH,n:bhxh+' tháng → '+yF(bhxhY)+' (làm tròn K7Đ5)'},
+      {l:'Bảo lưu BHXH hoặc 1 lần',b:'Điều 8 K2 điểm e',a:null,n:'Quyền lựa chọn'},
+    ];
+
+  } else if(/^d[910]+k[12](a|b|c)$/.test(p)){
+    var dieu=p.startsWith('d9')?'9':'10';
+    var sub=p.slice(-1);
+    var isK2=p.indexOf('k2')>-1;
+    var base=getPC(isK2);
+    if(base<=0){alert(isK2?'Nhập lương CBCC cấp xã (trước khi bố trí)!':'Nhập phụ cấp hàng tháng!');return;}
+    var ctM=gv('ef-ct'),ctY=roundYears(ctM),conlaiM=gv('ef-conlai');
+    var tc1=0,tc1L='',tc1N='',baseLabel=isK2?'lương CBCC':'PC';
+    if(sub==='a'){
+      if(ctM>=60) warns.push('⚠ Có ≥5 năm công tác → không phải trường hợp (a). Kiểm tra lại.');
+      tc1=0.8*base*ctM; tc1L='TC1 = 0,8 × '+baseLabel+' × '+ctM+' tháng (CT thực tế)'; tc1N=ctM+' tháng công tác (không làm tròn theo K7Đ5)';
+    } else if(sub==='b'){
+      if(ctM<60) warns.push('⚠ Dưới 5 năm công tác → không phải trường hợp (b).');
+      if(conlaiM>=60) warns.push('⚠ Còn ≥5 năm đến hưu → nên áp dụng trường hợp (c).');
+      tc1=0.8*base*conlaiM; tc1L='TC1 = 0,8 × '+baseLabel+' × '+conlaiM+' tháng (nghỉ sớm)'; tc1N=conlaiM+' tháng nghỉ sớm (không làm tròn)';
+    } else {
+      if(ctM<60) warns.push('⚠ Dưới 5 năm công tác → không phải trường hợp (c).');
+      if(conlaiM>0&&conlaiM<60) warns.push('⚠ Còn dưới 5 năm đến hưu → nên áp dụng trường hợp (b).');
+      tc1=0.8*base*60; tc1L='TC1 = 0,8 × '+baseLabel+' × 60 tháng (cố định)'; tc1N='Còn '+conlaiM+' tháng đến hưu (≥60 tháng → TC1 cố định 60 tháng)';
+    }
+    var tc2=1.5*base*ctY,tc3=3*base;
+    total=tc1+tc2+tc3;
+    pLabel='Điều '+dieu+' Khoản '+(isK2?'2':'1')+'('+sub+') – HĐKCT '+(dieu==='9'?'cấp xã':'thôn/TDP');
+    items=[
+      {l:tc1L,b:'Điều '+dieu+' K'+(isK2?'2':'1')+' TC1',a:tc1,n:tc1N},
+      {l:'TC2 = 1,5 × '+baseLabel+' × '+yF(ctY)+' (công tác)',b:'Điều '+dieu+' K'+(isK2?'2':'1')+' TC2',a:tc2,n:ctM+' tháng → '+yF(ctY)+' (làm tròn K7Đ5)'},
+      {l:'TC tìm việc = 3 × '+baseLabel,b:'Điều '+dieu+' K'+(isK2?'2':'1')+' TC3',a:tc3,n:''},
+      {l:'Bảo lưu BHXH hoặc 1 lần',b:'Điều '+dieu+' K'+(isK2?'2':'1'),a:null,n:'Quyền lựa chọn'},
+    ];
+
+  } else if(p==='d9k3'||p==='d10k3'){
+    var dieu=p.startsWith('d9')?'9':'10';
+    var pc=getPC(false);
+    if(pc<=0){alert('Nhập phụ cấp hàng tháng!');return;}
+    total=15*pc; pLabel='Điều '+dieu+' Khoản 3 – Đã đủ tuổi hưu hoặc hưởng hưu trí';
+    items=[{l:'TC = 15 tháng × phụ cấp hàng tháng (một lần)',b:'Điều '+dieu+' K3',a:total,n:''}];
+  }
+
+  var rec={name:name,pos:pos,unit:unit,pol:p,pLabel:pLabel,items:items,total:total,noMoney:noMoney,warns:warns,time:new Date().toLocaleString('vi-VN')};
+  saveHist(rec); renderRes(rec);
+}
+
+function renderRes(r) {
+  var fd=getFunding();
+  var html='<div class="rn">'+r.name+'</div><div class="rp">'+(r.pos||'')+(r.unit?' – '+r.unit:'')+'</div>';
+  html+='<div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:10px">'+r.pLabel+'</div>';
+  (r.warns||[]).forEach(function(w){html+='<div class="al al-w">'+w+'</div>';});
+  if(r.noMoney){
+    html+='<div class="al al-e" style="font-size:13px">⚠ <b>KHÔNG CÓ TRỢ CẤP BẰNG TIỀN</b><br>Quyền lợi duy nhất: Không bị trừ tỷ lệ % lương hưu khi nghỉ sớm dưới 2 năm.</div>';
+  }
+  html+='<div style="margin:10px 0">';
+  (r.items||[]).forEach(function(it){
+    html+='<div class="ti"><div class="tl">'+it.l+'<span class="tb2">'+it.b+(it.n?' · '+it.n:'')+'</span></div>';
+    html+=(it.a===null)?'<div class="ta z">–</div>':'<div class="ta '+(it.a>0?'ok':'z')+'">'+fmt(it.a)+' đ</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  if(!r.noMoney){
+    html+='<div class="tot"><div class="tot-l">Tổng trợ cấp TGBC</div><div class="tot-a">'+fmt(r.total)+' đ</div></div>';
+  }
+  html+='<span class="badge '+fd.c+'">💰 Nguồn KP: '+fd.l+'</span>';
+  html+='<div style="font-size:10px;color:var(--muted);margin-top:7px">Căn cứ: Nghị định 154/2025/NĐ-CP · Tính lúc: '+r.time+'</div>';
+  document.getElementById('res').innerHTML=html;
+}
+
+function saveHist(d){
+  try{var h=JSON.parse(localStorage.getItem('tgbc_h2')||'[]');h.unshift(d);h=h.slice(0,50);localStorage.setItem('tgbc_h2',JSON.stringify(h));renderHist();}catch(e){}
+}
+
+function renderHist(){
+  try{
+    var h=JSON.parse(localStorage.getItem('tgbc_h2')||'[]');
+    var el=document.getElementById('hist');
+    if(!h.length){el.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;padding:10px">Chưa có hồ sơ nào</div>';return;}
+    el.innerHTML=h.slice(0,10).map(function(r,i){
+      return '<div style="padding:7px 0;border-bottom:1px solid #f0f2f5;cursor:pointer" onclick="loadHist('+i+')">'
+        +'<div style="font-size:13px;font-weight:600">'+r.name+'</div>'
+        +'<div style="font-size:11px;color:var(--muted)">'+r.pLabel+' · '+r.time+'</div>'
+        +'<div style="font-size:12px;color:var(--ok);font-weight:600">'+(r.noMoney?'Không có TC tiền mặt':fmt(r.total)+' đ')+'</div>'
+        +'</div>';
+    }).join('');
+  }catch(e){}
+}
+
+function loadHist(i){try{var h=JSON.parse(localStorage.getItem('tgbc_h2')||'[]');renderRes(h[i]);}catch(e){}}
+
+function clrHist(){if(confirm('Xóa tất cả hồ sơ?')){localStorage.removeItem('tgbc_h2');renderHist();}}
+
+function clrForm(){
+  document.querySelectorAll('input[type=number],input[type=text]').forEach(function(e){e.value='';});
+  document.getElementById('f-lcb').value='2340000';
+  document.getElementById('sal-prev').textContent='';
+  document.getElementById('res').innerHTML='<div class="re"><div style="font-size:38px;margin-bottom:10px">📋</div>Nhập thông tin và bấm <strong>Tính chế độ</strong></div>';
+}
+
+renderPols();renderEF();renderHist();
+</script>
+</body>
+</html>
