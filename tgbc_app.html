@@ -227,7 +227,7 @@ tr:nth-child(even) td{background:#f8fafc}
   </div>
   <div class="card" id="luong-card">
     <div class="ctit">💰 Tiền lương hiện hưởng (tháng liền kề trước TGBC – K1 Điều 5)</div>
-    <div class="fr"><label>Mức lương cơ sở (đồng/tháng)</label><input type="number" id="f-lcb" value="2340000" oninput="calcSal()"></div>
+    <div class="fr"><label>Mức lương cơ sở (đồng/tháng)</label><input type="number" id="f-lcb" value="2530000" oninput="calcSal()"></div>
     <div class="fr"><label>Hệ số lương</label><input type="number" id="f-hsl" step="0.01" placeholder="3.00" oninput="calcSal()"></div>
     <div class="fr"><label>Phụ cấp chức vụ (hệ số)</label><input type="number" id="f-pccv" step="0.01" placeholder="0.00" oninput="calcSal()"></div>
     <div class="fr"><label>Phụ cấp thâm niên vượt khung (hệ số)</label><input type="number" id="f-pctnvk" step="0.01" placeholder="0.00" oninput="calcSal()"></div>
@@ -272,21 +272,23 @@ tr:nth-child(even) td{background:#f8fafc}
 
 <!-- TAB 2 -->
 <div id="t2" class="wrap hid">
-<div class="card"><div class="ctit">✅ Điều 2 – Đối tượng được áp dụng TGBC</div>
+<div class="card"><div class="ctit">✅ Điều 2 – Đối tượng thực hiện chính sách TGBC (NĐ 154/2025)</div>
 <table><tr><th>Điểm</th><th>Điều kiện</th></tr>
-<tr><td>a</td><td>Dôi dư do sắp xếp tổ chức bộ máy, đơn vị hành chính</td></tr>
-<tr><td>b</td><td>Không hoàn thành nhiệm vụ được giao 02 năm liên tiếp gần nhất</td></tr>
-<tr><td>c</td><td>Không đạt tiêu chuẩn chức danh, vị trí việc làm theo quy định</td></tr>
-<tr><td>d</td><td>Dôi dư do đơn vị giải thể, phá sản, chuyển đổi hình thức hoạt động</td></tr>
-<tr><td>đ</td><td>Mắc bệnh hiểm nghèo không còn khả năng hoàn thành nhiệm vụ</td></tr>
-<tr><td>e</td><td>Có năng lực hạn chế không thể bố trí việc khác</td></tr>
-<tr><td>g</td><td>Dôi dư do không tuyển dụng lại sau nghỉ hưởng chế độ BH</td></tr>
-<tr><td>h</td><td>Dôi dư do các trường hợp khác theo quy định</td></tr>
-</table></div>
-<div class="card"><div class="ctit">❌ Điều 4 – Trường hợp KHÔNG được giải quyết TGBC</div>
+<tr><td>a</td><td>CBCC, viên chức, người LĐ <b>dôi dư do sắp xếp tổ chức bộ máy</b> (trừ đối tượng hưởng chính sách riêng của Chính phủ)</td></tr>
+<tr><td>b</td><td>CBCC lãnh đạo <b>thôi giữ chức vụ do sắp xếp tổ chức bộ máy</b> hoặc được bổ nhiệm vào chức vụ có PC thấp hơn, cá nhân tự nguyện và được đơn vị đồng ý (trừ đối tượng hưởng chính sách riêng)</td></tr>
+<tr><td>c</td><td>CBCC lãnh đạo <b>thôi giữ chức vụ do cơ cấu lại, nâng cao chất lượng lãnh đạo</b> theo quyết định cấp có thẩm quyền, cá nhân tự nguyện và được đơn vị đồng ý</td></tr>
+<tr><td>d</td><td><b>Dôi dư do rà soát, sắp xếp lại nhân sự</b> theo quyết định cấp có thẩm quyền; hoặc ĐVSN sắp xếp lại nhân sự để thực hiện cơ chế tự chủ</td></tr>
+<tr><td>đ</td><td><b>Dôi dư do cơ cấu lại theo vị trí việc làm</b>, không thể bố trí việc khác; hoặc bố trí được nhưng cá nhân tự nguyện và được đơn vị đồng ý</td></tr>
+<tr><td>e</td><td><b>Chưa đạt trình độ đào tạo theo tiêu chuẩn vị trí việc làm</b>, không có vị trí phù hợp và không thể đào tạo lại; hoặc được bố trí việc khác nhưng tự nguyện TGBC</td></tr>
+<tr><td>g</td><td>Trong năm trước hoặc năm xét TGBC <b>xếp loại không hoàn thành nhiệm vụ</b>; hoặc xếp loại hoàn thành nhưng cá nhân tự nguyện và được đơn vị đồng ý</td></tr>
+<tr><td>h</td><td>Trong năm trước hoặc năm xét TGBC có <b>tổng số ngày nghỉ ốm đau ≥200 ngày</b> (xác nhận BHXH); hoặc nghỉ đúng số ngày tối đa theo quy định và tự nguyện TGBC</td></tr>
+</table>
+<div class="al al-i" style="margin-top:8px;font-size:11px">📌 Lưu ý Điều 2 K4–5: Người HĐKCT cấp xã (K4) và HĐKCT thôn/TDP (K5) dôi dư do sắp xếp cũng thuộc đối tượng TGBC (áp dụng Điều 9, 10)</div>
+</div>
+<div class="card"><div class="ctit">❌ Điều 4 – Trường hợp CHƯA thực hiện TGBC (NĐ 154/2025)</div>
 <table><tr><th>Trường hợp</th><th>Mô tả</th></tr>
-<tr><td>Nghỉ thai sản / nuôi con</td><td>Đang nghỉ thai sản, nghỉ chế độ khi sinh con, hoặc nuôi con dưới 36 tháng tuổi</td></tr>
-<tr><td>Đang xem xét kỷ luật / truy tố</td><td>Đang trong thời gian bị xem xét kỷ luật, bị truy tố, điều tra, truy nã</td></tr>
+<tr><td>Mang thai / thai sản / nuôi con nhỏ</td><td>Đang mang thai, nghỉ thai sản, hoặc đang nuôi con dưới 36 tháng tuổi <b>(trừ trường hợp cá nhân tự nguyện TGBC)</b></td></tr>
+<tr><td>Đang bị xem xét kỷ luật / điều tra</td><td>Đang trong thời gian xem xét kỷ luật, hoặc <b>truy cứu trách nhiệm hình sự</b>, hoặc bị thanh tra, kiểm tra do có dấu hiệu vi phạm</td></tr>
 </table></div>
 <div class="card"><div class="ctit">📋 Điều 5 – Quy định chung về cách tính</div>
 <table><tr><th>Khoản</th><th>Nội dung</th></tr>
@@ -305,8 +307,8 @@ tr:nth-child(even) td{background:#f8fafc}
 <div id="t3" class="wrap hid">
 <div class="fs"><div class="ft">Điều 6 – Nghỉ hưu trước tuổi (CBCC / Viên chức)</div>
 <table><tr><th>Khoản</th><th>Điều kiện</th><th>TC nghỉ sớm</th><th>TC BHXH</th></tr>
-<tr><td><b>K1</b></td><td>Phụ lục II; sớm 2–5 năm; ≥15 năm NN/KV 0,7; đủ BHXH hưởng lương hưu</td><td>Số năm sớm (đã làm tròn K7Đ5) × 5T × lương</td><td>BHXH ≥20n: 5T+(N-20)×0,5T × lương<br>15≤N&lt;20: 5T×lương<br>N&lt;15: Không có</td></tr>
-<tr><td><b>K2</b></td><td>Phụ lục I; sớm 2–5 năm; đủ BHXH hưởng lương hưu</td><td>Số năm sớm (đã làm tròn) × 5T × lương</td><td>Như K1</td></tr>
+<tr><td><b>K1</b></td><td>Phụ lục II; sớm 2–5 năm; ≥15 năm NN/ĐBNN/KV 0,7; đủ BHXH hưởng lương hưu</td><td>Số năm sớm (đã làm tròn K7Đ5) × 5T × lương</td><td>≥20n: 20 năm đầu = <b>5T</b> + mỗi năm từ 21 trở đi = <b>0,5T</b> × lương<br>15–19n: <b>5T</b> × lương<br>&lt;15n: Không có TC BHXH</td></tr>
+<tr><td><b>K2</b></td><td>Phụ lục I; sớm 2–5 năm; đủ BHXH hưởng lương hưu</td><td>Số năm sớm (đã làm tròn) × 5T × lương</td><td>Như K1 (theo Điều 6 K2c NĐ 154/2025)</td></tr>
 <tr style="background:#fffbeb"><td><b>K3</b></td><td>Phụ lục II; sớm &lt;2 năm; ≥15 năm NN/KV 0,7; đủ BHXH</td><td colspan="2" style="color:var(--warn);font-weight:700">⚠ KHÔNG có TC tiền – Chỉ: "không bị trừ tỷ lệ % lương hưu"</td></tr>
 <tr style="background:#fffbeb"><td><b>K4</b></td><td>Phụ lục I; sớm &lt;2 năm; đủ BHXH hưởng lương hưu</td><td colspan="2" style="color:var(--warn);font-weight:700">⚠ KHÔNG có TC tiền – Chỉ: "không bị trừ tỷ lệ % lương hưu"</td></tr>
 </table></div>
@@ -545,7 +547,7 @@ function roundYears(totalMonths) {
 function getSal() {
   var manual=parseFloat(document.getElementById('f-lmanual').value);
   if(!isNaN(manual)&&manual>0) return manual;
-  var lcb=parseFloat(document.getElementById('f-lcb').value)||2340000;
+  var lcb=parseFloat(document.getElementById('f-lcb').value)||2530000;
   var hsl=parseFloat(document.getElementById('f-hsl').value)||0;
   var pccv=parseFloat(document.getElementById('f-pccv').value)||0;
   var pctnvk=parseFloat(document.getElementById('f-pctnvk').value)||0;
@@ -562,7 +564,7 @@ function getPC(isK2) {
 function calcSal() {
   var manual=parseFloat(document.getElementById('f-lmanual').value);
   if(!isNaN(manual)&&manual>0){document.getElementById('sal-prev').textContent='Tiền lương: '+fmt(manual)+' đ/tháng (nhập trực tiếp)';return;}
-  var lcb=parseFloat(document.getElementById('f-lcb').value)||2340000;
+  var lcb=parseFloat(document.getElementById('f-lcb').value)||2530000;
   var hsl=parseFloat(document.getElementById('f-hsl').value)||0;
   if(hsl===0){document.getElementById('sal-prev').textContent='';return;}
   var pccv=parseFloat(document.getElementById('f-pccv').value)||0;
@@ -775,7 +777,7 @@ function clrHist(){if(confirm('Xóa tất cả hồ sơ?')){localStorage.removeI
 
 function clrForm(){
   document.querySelectorAll('input[type=number],input[type=text]').forEach(function(e){e.value='';});
-  document.getElementById('f-lcb').value='2340000';
+  document.getElementById('f-lcb').value='2530000';
   document.getElementById('sal-prev').textContent='';
   document.getElementById('f-bmonth').value='';
   document.getElementById('f-tgbcmonth').value='';
