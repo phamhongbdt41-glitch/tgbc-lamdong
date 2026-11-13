@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thẩm định TGBC – Sở Dân tộc và Tôn giáo Lâm Đồng</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 :root{--navy:#1a3a5c;--navy2:#245080;--gold:#e8a000;--bg:#f4f6f9;--card:#fff;--bdr:#d0d7e0;--tx:#1f2937;--muted:#6b7280;--ok:#16a34a;--warn:#d97706;--err:#dc2626;--info:#2563eb}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -79,6 +80,17 @@ tr:nth-child(even) td{background:#f8fafc}
 .fs{margin-bottom:18px}
 .ft{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:7px;padding:5px 9px;background:#eef3f9;border-radius:4px}
 @media print{.tabs,.brow,.hdr p{display:none}.wrap{max-width:100%;padding:8px}.grid2{grid-template-columns:1fr 1fr}}
+.scan-zone{border:2px dashed var(--bdr);border-radius:8px;padding:22px 16px;text-align:center;cursor:pointer;transition:.2s;color:var(--muted);font-size:13px;background:#fafbfc}
+.scan-zone:hover,.scan-zone.drag{border-color:var(--navy);background:#eef3f9;color:var(--navy)}
+.scan-prog{height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin:8px 0}
+.scan-prog-bar{height:100%;background:var(--navy);border-radius:3px;transition:width .3s}
+.cond-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #f3f4f6;font-size:12px}
+.cond-ic{font-size:15px;line-height:1.3;flex-shrink:0}
+.cond-name{font-weight:600;line-height:1.3}
+.cond-note{font-size:11px;color:var(--muted);margin-top:1px}
+.verdict-pass{background:#d1fae5;color:#065f46;font-size:14px;font-weight:700;padding:11px 14px;border-radius:7px;border:1.5px solid #6ee7b7;text-align:center;margin-bottom:12px}
+.verdict-fail{background:#fee2e2;color:#991b1b;font-size:14px;font-weight:700;padding:11px 14px;border-radius:7px;border:1.5px solid #fca5a5;text-align:center;margin-bottom:12px}
+.verdict-warn{background:#fef9c3;color:#854d0e;font-size:13px;font-weight:700;padding:11px 14px;border-radius:7px;border:1.5px solid #fde68a;text-align:center;margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -104,6 +116,39 @@ tr:nth-child(even) td{background:#f8fafc}
 
 <!-- TAB 1 -->
 <div id="t1" class="wrap">
+<div class="card" style="margin-bottom:16px">
+  <div class="ctit" style="cursor:pointer;user-select:none" onclick="toggleScan()">
+    📷 Nhận dạng đơn tự động (OCR)
+    <span id="scan-toggle" style="float:right;font-size:11px;font-weight:400;color:rgba(255,255,255,.7);background:rgba(255,255,255,.15);padding:2px 9px;border-radius:10px">▶ Mở</span>
+  </div>
+  <div id="scan-body" style="display:none;padding-top:4px">
+    <div class="al al-i" style="margin-bottom:10px;font-size:11px">Tải lên ảnh chụp đơn/scan hồ sơ TGBC. Phần mềm sẽ nhận dạng chữ và tự điền thông tin. <b>Luôn kiểm tra lại trước khi tính.</b></div>
+    <div class="scan-zone" id="drop-zone"
+         onclick="document.getElementById('scan-input').click()"
+         ondragover="event.preventDefault();this.classList.add('drag')"
+         ondragleave="this.classList.remove('drag')"
+         ondrop="event.preventDefault();this.classList.remove('drag');startOCR(event.dataTransfer.files[0])">
+      <div style="font-size:30px;margin-bottom:6px">📄</div>
+      <div style="font-weight:600">Nhấn hoặc kéo thả ảnh đơn vào đây</div>
+      <div style="font-size:11px;margin-top:3px;color:var(--muted)">Hỗ trợ JPG, PNG, WebP – ảnh chụp hoặc scan</div>
+    </div>
+    <input type="file" id="scan-input" accept="image/*" style="display:none" onchange="startOCR(this.files[0])">
+    <div id="scan-prog-wrap" style="display:none;margin-top:8px"><div class="scan-prog"><div class="scan-prog-bar" id="scan-prog-bar" style="width:0%"></div></div></div>
+    <div id="ocr-status" style="font-size:12px;color:var(--muted);margin-top:5px"></div>
+    <div id="ocr-result" style="display:none;margin-top:12px">
+      <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:7px">🔍 Dữ liệu trích xuất được:</div>
+      <table id="ocr-fields-tbl" style="width:100%;font-size:12px;margin-bottom:10px;border-collapse:collapse"></table>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-p" style="font-size:12px;padding:7px 14px" onclick="applyOCRData()">↓ Áp dụng vào form</button>
+        <button class="btn btn-s" style="font-size:12px;padding:7px 10px" onclick="document.getElementById('ocr-result').style.display='none';document.getElementById('ocr-status').textContent=''">✕ Đóng</button>
+      </div>
+      <details style="margin-top:8px">
+        <summary style="font-size:11px;color:var(--muted);cursor:pointer">📄 Xem văn bản nhận dạng đầy đủ</summary>
+        <pre id="ocr-raw" style="font-size:10px;color:var(--muted);white-space:pre-wrap;max-height:160px;overflow-y:auto;background:#f8fafc;padding:8px;border-radius:4px;margin-top:5px;border:1px solid var(--bdr)"></pre>
+      </details>
+    </div>
+  </div>
+</div>
 <div class="grid2">
 <div>
   <div class="card">
@@ -658,7 +703,9 @@ function calc() {
     items=[{l:'TC = 15 tháng × phụ cấp hàng tháng (một lần)',b:'Điều '+dieu+' K3',a:total,n:''}];
   }
 
-  var rec={name:name,pos:pos,unit:unit,pol:p,pLabel:pLabel,items:items,total:total,noMoney:noMoney,warns:warns,time:new Date().toLocaleString('vi-VN')};
+  var efData={som:gv('ef-som'),bhxh:gv('ef-bhxh'),namNN:gv('ef-namnn'),conlai:gv('ef-conlai'),ct:gv('ef-ct'),tuoi:gv('ef-tuoi')};
+  var validation=validatePolicy(p,efData);
+  var rec={name:name,pos:pos,unit:unit,pol:p,pLabel:pLabel,items:items,total:total,noMoney:noMoney,warns:warns,validation:validation,time:new Date().toLocaleString('vi-VN')};
   saveHist(rec); renderRes(rec);
 }
 
@@ -666,6 +713,24 @@ function renderRes(r) {
   var fd=getFunding();
   var html='<div class="rn">'+r.name+'</div><div class="rp">'+(r.pos||'')+(r.unit?' – '+r.unit:'')+'</div>';
   html+='<div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:10px">'+r.pLabel+'</div>';
+  // Validation section
+  if(r.validation){
+    var v=r.validation;
+    if(v.passed){
+      html+='<div class="verdict-pass">✅ ĐẠT – Đủ '+v.conditions.length+'/'+v.conditions.length+' điều kiện áp dụng chính sách</div>';
+    } else {
+      var nFail=v.conditions.filter(function(c){return!c.met;}).length;
+      html+='<div class="verdict-fail">❌ KHÔNG ĐẠT – Thiếu '+nFail+'/'+v.conditions.length+' điều kiện bắt buộc</div>';
+    }
+    html+='<div style="font-size:11px;font-weight:700;color:var(--muted);margin:6px 0 3px;text-transform:uppercase;letter-spacing:.5px">Kiểm tra điều kiện (NĐ 154/2025 – NĐ 135/2020)</div>';
+    v.conditions.forEach(function(c){
+      html+='<div class="cond-row">'
+        +'<span class="cond-ic">'+(c.met?'✅':'❌')+'</span>'
+        +'<div><div class="cond-name" style="color:'+(c.met?'var(--ok)':'var(--err)')+'">'+c.name+'</div>'
+        +'<div class="cond-note">'+c.note+'</div></div></div>';
+    });
+    html+='<div class="hdiv"></div>';
+  }
   (r.warns||[]).forEach(function(w){html+='<div class="al al-w">'+w+'</div>';});
   if(r.noMoney){
     html+='<div class="al al-e" style="font-size:13px">⚠ <b>KHÔNG CÓ TRỢ CẤP BẰNG TIỀN</b><br>Quyền lợi duy nhất: Không bị trừ tỷ lệ % lương hưu khi nghỉ sớm dưới 2 năm.</div>';
@@ -769,6 +834,211 @@ function exportExcel(){
     XLSX.utils.book_append_sheet(wb,ws2,'Tóm tắt');
     XLSX.writeFile(wb,'DanhSach_TGBC_'+today.replace(/\//g,'-')+'.xlsx');
   }catch(e){alert('Lỗi xuất Excel: '+e.message);}
+}
+
+// ============ VALIDATION – ĐẠT / KHÔNG ĐẠT ============
+function mkC(name,met,note){return{name:name,met:!!met,note:note};}
+function bhxhNote(m){return Math.floor(m/12)+'n '+(m%12)+'th'+(m>=180?' ✓':' → cần ≥15 năm (180 tháng)');}
+function somNote(m,lo,hi){
+  if(m<lo) return m+'th → dưới '+lo+' tháng';
+  if(hi&&m>hi) return m+'th → vượt '+hi+' tháng';
+  return m+'th ✓';
+}
+
+function validatePolicy(p,d){
+  var conds=[];
+  var bhxh=d.bhxh||0, som=d.som||0, namNN=d.namNN||0, conlai=d.conlai||0, ct=d.ct||0, tuoi=d.tuoi||0;
+
+  if(p==='d6k1'){
+    conds=[
+      mkC('≥15 năm làm nghề NN/ĐBNN/khu vực hệ số 0,7 (Phụ lục II)', namNN>=15, namNN+'n '+(namNN>=15?'✓':'→ cần ≥15 năm')),
+      mkC('Nghỉ sớm 2–5 năm (24–60 tháng so với tuổi hưu Phụ lục II)', som>=24&&som<=60, somNote(som,24,60)),
+      mkC('Đủ điều kiện hưởng lương hưu (≥15 năm đóng BHXH)', bhxh>=180, bhxhNote(bhxh)),
+    ];
+  } else if(p==='d6k2'){
+    conds=[
+      mkC('Nghỉ sớm 2–5 năm (24–60 tháng so với tuổi hưu Phụ lục I)', som>=24&&som<=60, somNote(som,24,60)+( som<24?' → dưới 2 năm: dùng K4':'')),
+      mkC('Đủ điều kiện hưởng lương hưu (≥15 năm đóng BHXH)', bhxh>=180, bhxhNote(bhxh)),
+    ];
+  } else if(p==='d6k3'){
+    conds=[
+      mkC('≥15 năm làm nghề NN/ĐBNN/khu vực 0,7 (Phụ lục II)', namNN>=15, namNN+'n '+(namNN>=15?'✓':'→ cần ≥15 năm')),
+      mkC('Nghỉ sớm dưới 2 năm (1–23 tháng so với tuổi hưu Phụ lục II)', som>=1&&som<24, somNote(som,1,23)+(som>=24?' → ≥2 năm: phải dùng K1':'')),
+      mkC('Đủ điều kiện hưởng lương hưu (≥15 năm đóng BHXH)', bhxh>=180, bhxhNote(bhxh)),
+    ];
+  } else if(p==='d6k4'){
+    conds=[
+      mkC('Nghỉ sớm dưới 2 năm (1–23 tháng so với tuổi hưu Phụ lục I)', som>=1&&som<24, somNote(som,1,23)+(som>=24?' → ≥2 năm: phải dùng K2':'')),
+      mkC('Đủ điều kiện hưởng lương hưu (≥15 năm đóng BHXH)', bhxh>=180, bhxhNote(bhxh)),
+    ];
+  } else if(p==='d7'){
+    conds=[
+      mkC('Còn trên 3 năm (>36 tháng) đến tuổi nghỉ hưu', conlai>36, conlai+'th '+(conlai<=36?'→ ≤3 năm: phải dùng Điều 6 K3/K4':'✓')),
+      mkC('Chuyển sang tổ chức không hưởng KP thường xuyên từ NSNN', true, 'Điều kiện xác nhận theo hồ sơ'),
+    ];
+  } else if(p==='d8k1'){
+    conds=[
+      mkC('Chưa đủ tuổi nghỉ hưu (theo NĐ 135/2020)', true, 'Điều kiện xác nhận theo hồ sơ'),
+      mkC('Có thời gian đóng BHXH (tính TC BHXH)', bhxh>0, bhxh>0?bhxhNote(bhxh):'→ Chưa nhập số tháng BHXH'),
+    ];
+  } else if(p==='d8k2'){
+    conds=[
+      mkC('Dưới 45 tuổi tại thời điểm TGBC', tuoi>0&&tuoi<45, tuoi>0?(tuoi+'t '+(tuoi<45?'✓':'→ ≥45 tuổi: không áp dụng K2')):'→ Chưa nhập tuổi'),
+      mkC('Có sức khỏe; công việc không phù hợp trình độ', true, 'Điều kiện xác nhận theo hồ sơ'),
+    ];
+  } else if(/^d[910]+k[12](a|b|c)$/.test(p)){
+    var sub=p.slice(-1);
+    if(sub==='a'){
+      conds=[mkC('Có dưới 5 năm công tác (<60 tháng)', ct>0&&ct<60, ct+'th '+(ct>=60?'→ ≥5 năm → dùng (b)/(c)':'✓'))];
+    } else if(sub==='b'){
+      conds=[
+        mkC('Có ≥5 năm công tác (≥60 tháng)', ct>=60, ct+'th '+(ct<60?'→ <5 năm → dùng (a)':'✓')),
+        mkC('Còn dưới 5 năm đến tuổi hưu (<60 tháng)', conlai>=0&&conlai<60, conlai+'th '+(conlai>=60?'→ ≥5 năm → dùng (c)':'✓')),
+      ];
+    } else {
+      conds=[
+        mkC('Có ≥5 năm công tác (≥60 tháng)', ct>=60, ct+'th '+(ct<60?'→ <5 năm → dùng (a)':'✓')),
+        mkC('Còn ≥5 năm đến tuổi hưu (≥60 tháng)', conlai>=60, conlai+'th '+(conlai<60?'→ <5 năm → dùng (b)':'✓')),
+      ];
+    }
+  } else if(p==='d9k3'||p==='d10k3'){
+    conds=[mkC('Đã đủ tuổi nghỉ hưu hoặc đang hưởng lương hưu/trợ cấp MSLD', true, 'Điều kiện xác nhận theo hồ sơ')];
+  }
+
+  var passed=conds.length>0&&conds.every(function(c){return c.met;});
+  return{passed:passed,conditions:conds};
+}
+
+// ============ OCR – NHẬN DẠNG ĐƠN ============
+var _ocrData={};
+
+function toggleScan(){
+  var b=document.getElementById('scan-body'),t=document.getElementById('scan-toggle');
+  var open=b.style.display==='none';
+  b.style.display=open?'block':'none';
+  t.textContent=open?'▼ Thu':'▶ Mở';
+}
+
+async function startOCR(file){
+  if(!file||!file.type.startsWith('image/'))return alert('Chỉ hỗ trợ file ảnh (JPG/PNG/WebP)!');
+  var status=document.getElementById('ocr-status');
+  var progWrap=document.getElementById('scan-prog-wrap');
+  var progBar=document.getElementById('scan-prog-bar');
+  var result=document.getElementById('ocr-result');
+  result.style.display='none';
+  progWrap.style.display='block';
+  progBar.style.width='5%';
+  status.innerHTML='⏳ Đang tải dữ liệu nhận dạng tiếng Việt... (lần đầu ~15–20 giây)';
+  try{
+    var worker=await Tesseract.createWorker('vie+eng',1,{
+      logger:function(m){
+        if(m.status==='recognizing text'){
+          var pct=Math.round(m.progress*100);
+          progBar.style.width=pct+'%';
+          status.innerHTML='⏳ Nhận dạng: '+pct+'%';
+        } else if(m.status==='loading language traineddata'){
+          progBar.style.width='20%';
+        } else if(m.status==='initializing api'){
+          progBar.style.width='40%';
+        }
+      }
+    });
+    var res=await worker.recognize(file);
+    await worker.terminate();
+    progBar.style.width='100%';
+    var text=res.data.text;
+    document.getElementById('ocr-raw').textContent=text;
+    _ocrData=parseFormText(text);
+    renderOCRFields(_ocrData);
+    result.style.display='block';
+    status.innerHTML='✅ Nhận dạng xong! Kiểm tra dữ liệu bên dưới trước khi áp dụng.';
+    setTimeout(function(){progWrap.style.display='none';},1000);
+  }catch(e){
+    progWrap.style.display='none';
+    status.innerHTML='❌ Lỗi: '+e.message+'. Thử ảnh khác hoặc nhập tay.';
+  }
+}
+
+function parseFormText(txt){
+  var d={};
+  // Name
+  var m=txt.match(/(?:Họ và tên|Họ tên|HỌ VÀ TÊN)\s*[:\-]\s*([^\n\r,;\.]{3,40})/i);
+  if(m) d.name=m[1].trim();
+  // Birth date dd/mm/yyyy
+  m=txt.match(/(?:Sinh ngày|Ngày sinh|SINH NGÀY)\s*[:\-]?\s*(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})/i);
+  if(m){d.birthDay=m[1];d.birthMonth=m[2];d.birthYear=m[3];}
+  else{
+    m=txt.match(/ngày\s+(\d{1,2})\s+tháng\s+(\d{1,2})\s+năm\s+(\d{4})/i);
+    if(m){d.birthDay=m[1];d.birthMonth=m[2];d.birthYear=m[3];}
+    else{
+      m=txt.match(/(?:Năm sinh|NĂM SINH)\s*[:\-]\s*(\d{4})/i);
+      if(m) d.birthYear=m[1];
+      m=txt.match(/(?:Tháng sinh)\s*[:\-]\s*(\d{1,2})/i);
+      if(m) d.birthMonth=m[1];
+    }
+  }
+  // Position
+  m=txt.match(/(?:Chức danh|Chức vụ|CHỨC DANH|CHỨC VỤ)\s*[:\-]\s*([^\n\r,;\.]{3,50})/i);
+  if(m) d.position=m[1].trim();
+  // Unit
+  m=txt.match(/(?:Cơ quan|Đơn vị|CƠ QUAN|ĐƠN VỊ)\s*(?:công tác)?\s*[:\-]\s*([^\n\r,;]{5,60})/i);
+  if(m) d.unit=m[1].trim();
+  // Gender
+  if(/\b(ông|anh|nam giới)\b/i.test(txt)) d.gender='nam';
+  else if(/\b(bà|chị|nữ giới)\b/i.test(txt)) d.gender='nu';
+  // BHXH
+  m=txt.match(/(?:BHXH|bảo hiểm xã hội).*?(\d{3,4})\s*tháng/i);
+  if(m) d.bhxhM=m[1];
+  // Work months/years
+  m=txt.match(/(?:công tác|làm việc)\s+(\d+)\s+năm/i);
+  if(m) d.workY=m[1];
+  // Policy Điều/Khoản
+  var dieu=txt.match(/Điều\s*(\d+)/i), khoan=txt.match(/[Kk]hoản?\s*(\d+)|[Kk](\d+)/);
+  if(dieu){
+    var di=dieu[1],ki=khoan?(khoan[1]||khoan[2]):'';
+    var key='d'+di+(ki?'k'+ki:'');
+    if(['d6k1','d6k2','d6k3','d6k4','d7','d8k1','d8k2'].indexOf(key)>-1) d.policy=key;
+  }
+  return d;
+}
+
+function renderOCRFields(data){
+  var defs=[
+    {l:'Họ và tên',k:'name'},{l:'Chức danh',k:'position'},{l:'Đơn vị',k:'unit'},
+    {l:'Năm sinh',k:'birthYear'},{l:'Tháng sinh',k:'birthMonth'},
+    {l:'Giới tính',k:'gender',m:{nam:'Nam',nu:'Nữ'}},
+    {l:'BHXH (tháng)',k:'bhxhM'},{l:'Công tác (năm)',k:'workY'},
+    {l:'Chính sách',k:'policy',m:{d6k1:'Điều 6 K1',d6k2:'Điều 6 K2',d6k3:'Điều 6 K3',d6k4:'Điều 6 K4',d7:'Điều 7',d8k1:'Điều 8 K1',d8k2:'Điều 8 K2'}},
+  ];
+  var html='<tr style="background:var(--navy);color:#fff"><th style="padding:5px 8px;text-align:left">Trường</th><th style="padding:5px 8px;text-align:left">Giá trị nhận dạng</th></tr>';
+  var found=0;
+  defs.forEach(function(def){
+    var v=data[def.k];
+    if(!v&&v!==0) return;
+    found++;
+    var disp=def.m?(def.m[v]||v):v;
+    html+='<tr><td style="padding:4px 8px;border-bottom:1px solid #f0f2f5;font-weight:600">'+def.l+'</td>'
+      +'<td style="padding:4px 8px;border-bottom:1px solid #f0f2f5;color:var(--ok)">'+disp+'</td></tr>';
+  });
+  if(!found) html+='<tr><td colspan="2" style="padding:8px;color:var(--warn)">⚠ Không trích xuất được dữ liệu có cấu trúc. Thử ảnh rõ hơn hoặc nhập tay.</td></tr>';
+  document.getElementById('ocr-fields-tbl').innerHTML=html;
+}
+
+function applyOCRData(){
+  var d=_ocrData;
+  if(d.name) document.getElementById('f-name').value=d.name;
+  if(d.position) document.getElementById('f-pos').value=d.position;
+  if(d.unit) document.getElementById('f-unit').value=d.unit;
+  if(d.birthYear) document.getElementById('f-byear').value=d.birthYear;
+  if(d.birthMonth){var bm=document.getElementById('f-bmonth');if(bm)bm.value=parseInt(d.birthMonth)||'';}
+  if(d.gender){var g=document.getElementById('f-gender');if(g)g.value=d.gender;}
+  if(d.policy){
+    var ot=d.policy.startsWith('d9')?'hdkct_xa':d.policy.startsWith('d10')?'hdkct_thon':'cbcc';
+    setOT(ot); setPol(d.policy);
+    if(d.bhxhM){setTimeout(function(){var el=document.getElementById('ef-bhxh');if(el)el.value=d.bhxhM;},100);}
+  }
+  calcRetire(); calcSal();
+  alert('✅ Đã áp dụng! Vui lòng kiểm tra và bổ sung thông tin còn thiếu (đặc biệt: lương, BHXH, số tháng nghỉ sớm) trước khi nhấn Tính chế độ.');
 }
 
 // NĐ 135/2020 – retirement age calculation
