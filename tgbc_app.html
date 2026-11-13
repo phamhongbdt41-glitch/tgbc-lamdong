@@ -1243,7 +1243,13 @@ function parseDKLDField(v){var s=(v||'').toString().toLowerCase().trim();if(s.in
 
 function parseStaffRows(rows){
   if(!rows||rows.length<2)return[];
-  var hdr=rows[0].map(function(h){return(h||'').toString().trim();});
+  // Auto-detect header row: find first row containing 'họ' or 'ten' or 'name'
+  var hdrIdx=0;
+  for(var r=0;r<Math.min(10,rows.length);r++){
+    var rowStr=(rows[r]||[]).join('|').toLowerCase();
+    if(rowStr.indexOf('họ')>=0||rowStr.indexOf('ten')>=0||rowStr.indexOf('tên')>=0||rowStr.indexOf('name')>=0){hdrIdx=r;break;}
+  }
+  var hdr=rows[hdrIdx].map(function(h){return(h||'').toString().trim();});
   var hdrL=hdr.map(function(h){return h.toLowerCase();});
   var cm={
     ten:findColIdx(hdrL,['họ và tên','họ tên','ho va ten','tên nhân','ten']),
@@ -1256,7 +1262,7 @@ function parseStaffRows(rows){
     bhxh:findColIdx(hdrL,['bhxh','tháng bhxh','thang bhxh','tháng bh','so thang'])
   };
   var staff=[];
-  for(var i=1;i<rows.length;i++){
+  for(var i=hdrIdx+1;i<rows.length;i++){
     var row=rows[i];
     if(!row||row.every(function(c){return!c;}))continue;
     var ten=cm.ten>=0?(row[cm.ten]||'').toString().trim():'';
