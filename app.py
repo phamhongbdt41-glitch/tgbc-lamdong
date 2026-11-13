@@ -33,7 +33,7 @@ button:hover{background:#245080}
   <div class="logo">
     <div style="font-size:40px">🏛</div>
     <h1>Phần mềm Thẩm định TGBC</h1>
-    <p>Nghị định 154/2025/NĐ-CP · Sở Nội vụ Lâm Đồng</p>
+    <p>Nghị định 154/2025/NĐ-CP · Sở Dân tộc và Tôn giáo tỉnh Lâm Đồng</p>
   </div>
   {% if error %}<div class="err">{{ error }}</div>{% endif %}
   <form method="POST" action="/login">
