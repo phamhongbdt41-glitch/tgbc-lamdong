@@ -99,6 +99,7 @@ tr:nth-child(even) td{background:#f8fafc}
   <button class="tb on" onclick="tab('t1',this)">📋 Thẩm định hồ sơ</button>
   <button class="tb" onclick="tab('t2',this)">📖 Điều khoản áp dụng</button>
   <button class="tb" onclick="tab('t3',this)">🔢 Công thức tính</button>
+  <button class="tb" onclick="tab('t4',this)">🏖 Tuổi hưu NĐ 135</button>
 </div>
 
 <!-- TAB 1 -->
@@ -133,6 +134,51 @@ tr:nth-child(even) td{background:#f8fafc}
         <option value="vc_tc_tx">Viên chức – ĐVSN tự đảm bảo chi TX</option>
       </select>
     </div>
+    <div class="hdiv"></div>
+    <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:8px">🏖 Tuổi hưu (NĐ 135/2020) – áp dụng cho Điều 6/7/9/10</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+      <div class="fr"><label>Giới tính</label>
+        <select id="f-gender" onchange="calcRetire()">
+          <option value="nam">Nam</option>
+          <option value="nu">Nữ</option>
+        </select>
+      </div>
+      <div class="fr"><label>Điều kiện lao động</label>
+        <select id="f-cond" onchange="calcRetire()">
+          <option value="bt">Bình thường (Phụ lục I)</option>
+          <option value="nn">Nặng nhọc/khu vực 0,7 (Phụ lục II)</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+      <div class="fr"><label>Tháng sinh</label>
+        <select id="f-bmonth" onchange="calcRetire()">
+          <option value="">-- Chọn --</option>
+          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+        </select>
+      </div>
+      <div class="fr"><label>Năm sinh</label>
+        <input type="number" id="f-byear" placeholder="Ví dụ: 1970" min="1950" max="2000" oninput="calcRetire()">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+      <div class="fr"><label>Tháng hiệu lực TGBC</label>
+        <select id="f-tgbcmonth" onchange="calcRetire()">
+          <option value="">-- Tháng --</option>
+          <option value="1">T.1</option><option value="2">T.2</option><option value="3">T.3</option>
+          <option value="4">T.4</option><option value="5">T.5</option><option value="6">T.6</option>
+          <option value="7">T.7</option><option value="8">T.8</option><option value="9">T.9</option>
+          <option value="10">T.10</option><option value="11">T.11</option><option value="12">T.12</option>
+        </select>
+      </div>
+      <div class="fr"><label>Năm hiệu lực TGBC</label>
+        <input type="number" id="f-tgbcyear" placeholder="2026" min="2025" max="2032" oninput="calcRetire()">
+      </div>
+    </div>
+    <div id="retire-info" style="display:none;padding:9px 11px;background:#eff6ff;border:1px solid #93c5fd;border-radius:5px;font-size:12px;line-height:1.6;margin-top:4px"></div>
   </div>
   <div class="card" id="luong-card">
     <div class="ctit">💰 Tiền lương hiện hưởng (tháng liền kề trước TGBC – K1 Điều 5)</div>
@@ -246,6 +292,83 @@ tr:nth-child(even) td{background:#f8fafc}
 </div>
 </div>
 
+<!-- TAB 4 -->
+<div id="t4" class="wrap hid">
+<div class="card">
+  <div class="ctit">🏖 Tra cứu tuổi nghỉ hưu theo NĐ 135/2020/NĐ-CP</div>
+  <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:7px;padding:14px;margin-bottom:16px">
+    <div style="font-size:13px;font-weight:700;color:#1a3a5c;margin-bottom:10px">🔢 Tính tuổi nghỉ hưu cụ thể</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+      <div><label style="font-size:11px;font-weight:600;color:#6b7280;display:block;margin-bottom:3px">Tháng sinh</label>
+        <select id="t4-bm" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:4px;font-size:12px">
+          <option value="">-- Chọn --</option>
+          <option value="1">T.1</option><option value="2">T.2</option><option value="3">T.3</option>
+          <option value="4">T.4</option><option value="5">T.5</option><option value="6">T.6</option>
+          <option value="7">T.7</option><option value="8">T.8</option><option value="9">T.9</option>
+          <option value="10">T.10</option><option value="11">T.11</option><option value="12">T.12</option>
+        </select>
+      </div>
+      <div><label style="font-size:11px;font-weight:600;color:#6b7280;display:block;margin-bottom:3px">Năm sinh</label>
+        <input type="number" id="t4-by" placeholder="1970" min="1940" max="2000" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:4px;font-size:12px">
+      </div>
+      <div><label style="font-size:11px;font-weight:600;color:#6b7280;display:block;margin-bottom:3px">Giới tính</label>
+        <select id="t4-g" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:4px;font-size:12px">
+          <option value="nam">Nam</option>
+          <option value="nu">Nữ</option>
+        </select>
+      </div>
+      <div><label style="font-size:11px;font-weight:600;color:#6b7280;display:block;margin-bottom:3px">Điều kiện LĐ</label>
+        <select id="t4-c" style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:4px;font-size:12px">
+          <option value="bt">Phụ lục I – Bình thường</option>
+          <option value="nn">Phụ lục II – Nặng nhọc/khu vực 0,7</option>
+        </select>
+      </div>
+    </div>
+    <button onclick="calcT4()" style="margin-top:10px;padding:7px 16px;background:#1a3a5c;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600">Tính tuổi hưu →</button>
+    <div id="t4-res" style="margin-top:10px"></div>
+  </div>
+  <div style="font-size:13px;font-weight:700;color:#1a3a5c;margin-bottom:7px">📋 Phụ lục I – Điều kiện lao động bình thường (Điều 4 NĐ 135/2020)</div>
+  <table style="margin-bottom:16px">
+    <tr><th>Năm nghỉ hưu</th><th>Tuổi nghỉ hưu Nam</th><th>Tuổi nghỉ hưu Nữ</th></tr>
+    <tr><td>2021</td><td>60 tuổi 3 tháng</td><td>55 tuổi 4 tháng</td></tr>
+    <tr><td>2022</td><td>60 tuổi 6 tháng</td><td>55 tuổi 8 tháng</td></tr>
+    <tr><td>2023</td><td>60 tuổi 9 tháng</td><td>56 tuổi</td></tr>
+    <tr><td>2024</td><td>61 tuổi</td><td>56 tuổi 4 tháng</td></tr>
+    <tr><td>2025</td><td>61 tuổi 3 tháng</td><td>56 tuổi 8 tháng</td></tr>
+    <tr><td>2026</td><td>61 tuổi 6 tháng</td><td>57 tuổi</td></tr>
+    <tr><td>2027</td><td>61 tuổi 9 tháng</td><td>57 tuổi 4 tháng</td></tr>
+    <tr><td>2028</td><td>62 tuổi</td><td>57 tuổi 8 tháng</td></tr>
+    <tr><td>2029</td><td>62 tuổi</td><td>58 tuổi</td></tr>
+    <tr><td>2030</td><td>62 tuổi</td><td>58 tuổi 4 tháng</td></tr>
+    <tr><td>2031</td><td>62 tuổi</td><td>58 tuổi 8 tháng</td></tr>
+    <tr><td>2032</td><td>62 tuổi</td><td>59 tuổi</td></tr>
+    <tr><td>2033</td><td>62 tuổi</td><td>59 tuổi 4 tháng</td></tr>
+    <tr><td>2034</td><td>62 tuổi</td><td>59 tuổi 8 tháng</td></tr>
+    <tr><td>Từ 2035</td><td>62 tuổi</td><td>60 tuổi</td></tr>
+  </table>
+  <div style="font-size:13px;font-weight:700;color:#1a3a5c;margin-bottom:7px">📋 Phụ lục II – Nặng nhọc/khu vực hệ số 0,7 (Điều 5 NĐ 135/2020) – sớm tối đa 5 năm</div>
+  <table>
+    <tr><th>Năm nghỉ hưu</th><th>Tuổi thấp nhất Nam</th><th>Tuổi thấp nhất Nữ</th></tr>
+    <tr><td>2021</td><td>55 tuổi 3 tháng</td><td>50 tuổi 4 tháng</td></tr>
+    <tr><td>2022</td><td>55 tuổi 6 tháng</td><td>50 tuổi 8 tháng</td></tr>
+    <tr><td>2023</td><td>55 tuổi 9 tháng</td><td>51 tuổi</td></tr>
+    <tr><td>2024</td><td>56 tuổi</td><td>51 tuổi 4 tháng</td></tr>
+    <tr><td>2025</td><td>56 tuổi 3 tháng</td><td>51 tuổi 8 tháng</td></tr>
+    <tr><td>2026</td><td>56 tuổi 6 tháng</td><td>52 tuổi</td></tr>
+    <tr><td>2027</td><td>56 tuổi 9 tháng</td><td>52 tuổi 4 tháng</td></tr>
+    <tr><td>2028</td><td>57 tuổi</td><td>52 tuổi 8 tháng</td></tr>
+    <tr><td>2029</td><td>57 tuổi</td><td>53 tuổi</td></tr>
+    <tr><td>2030</td><td>57 tuổi</td><td>53 tuổi 4 tháng</td></tr>
+    <tr><td>2031</td><td>57 tuổi</td><td>53 tuổi 8 tháng</td></tr>
+    <tr><td>2032</td><td>57 tuổi</td><td>54 tuổi</td></tr>
+    <tr><td>2033</td><td>57 tuổi</td><td>54 tuổi 4 tháng</td></tr>
+    <tr><td>2034</td><td>57 tuổi</td><td>54 tuổi 8 tháng</td></tr>
+    <tr><td>Từ 2035</td><td>57 tuổi</td><td>55 tuổi</td></tr>
+  </table>
+  <p style="font-size:11px;color:var(--muted);margin-top:10px">📌 Phụ lục I áp dụng cho Điều 6 K2/K4 (điều kiện bình thường). Phụ lục II áp dụng cho Điều 6 K1/K3 (nặng nhọc/khu vực 0,7). Nghỉ hưu trước tuổi thấp nhất tối đa 5 năm (Điều 5 NĐ 135/2020).</p>
+</div>
+</div>
+
 <script>
 var S = { ot: 'cbcc', pol: null };
 
@@ -326,20 +449,20 @@ function renderEF() {
 
   if(p==='d6k1'||p==='d6k2'){
     tit.textContent='Điều 6 K'+(p==='d6k1'?'1':'2')+' – Thông tin tính chế độ';
-    body.innerHTML='<div class="fr"><label>Số tháng nghỉ sớm so với tuổi hưu (phải 24–60 tháng)</label><input type="number" id="ef-som" min="1" placeholder="Ví dụ: 30 tháng = 2,5 năm sớm"></div>'
+    body.innerHTML='<div class="fr"><label>Số tháng nghỉ sớm so với tuổi hưu (phải 24–60 tháng)</label><input type="number" id="ef-som" min="1" placeholder="Ví dụ: 30 tháng = 2,5 năm sớm"></div>'+getRetireAutoHint('ef-som')
       +'<div class="fr"><label>Tổng số tháng đóng BHXH</label><input type="number" id="ef-bhxh" min="0" placeholder="Ví dụ: 240 = 20 năm"></div>'
       +(p==='d6k1'?'<div class="fr"><label>Số năm làm nghề nặng nhọc / khu vực 0,7 (phải ≥ 15 năm)</label><input type="number" id="ef-namnn" min="0" step="0.5" placeholder="≥ 15 năm"></div>':'');
   } else if(p==='d6k3'||p==='d6k4'){
     tit.textContent='Điều 6 K'+(p==='d6k3'?'3':'4')+' – Xác nhận điều kiện';
     body.innerHTML='<div class="al al-e">⚠ <b>KHÔNG có trợ cấp bằng tiền.</b> Quyền lợi DUY NHẤT: không bị trừ tỷ lệ % lương hưu khi nghỉ sớm dưới 2 năm.</div>'
-      +'<div class="fr"><label>Số tháng nghỉ sớm (xác nhận phải < 24 tháng)</label><input type="number" id="ef-som" min="1" max="23" placeholder="< 24 tháng"></div>'
+      +'<div class="fr"><label>Số tháng nghỉ sớm (xác nhận phải < 24 tháng)</label><input type="number" id="ef-som" min="1" max="23" placeholder="< 24 tháng"></div>'+getRetireAutoHint('ef-som')
       +'<div class="fr"><label>Tổng số tháng đóng BHXH (xác nhận đủ hưởng lương hưu)</label><input type="number" id="ef-bhxh" min="0" placeholder="Đủ điều kiện hưởng lương hưu"></div>'
       +(p==='d6k3'?'<div class="fr"><label>Số năm làm nghề nặng nhọc / khu vực 0,7 (phải ≥ 15 năm)</label><input type="number" id="ef-namnn" min="0" step="0.5" placeholder="≥ 15 năm"></div>':'');
   } else if(p==='d7'){
     tit.textContent='Điều 7 – Thông tin tính chế độ';
     body.innerHTML='<div class="al al-i">ℹ Không áp dụng cho người còn ≤3 năm đến tuổi hưu → phải dùng Điều 6 K3/K4.</div>'
       +'<div class="fr"><label>Tổng số tháng đóng BHXH</label><input type="number" id="ef-bhxh" min="0" placeholder="Ví dụ: 240 = 20 năm"></div>'
-      +'<div class="fr"><label>Số tháng còn lại đến tuổi hưu (để kiểm tra điều kiện)</label><input type="number" id="ef-conlai" min="0" placeholder="Phải > 36 tháng để áp dụng Điều 7"></div>';
+      +'<div class="fr"><label>Số tháng còn lại đến tuổi hưu (để kiểm tra điều kiện)</label><input type="number" id="ef-conlai" min="0" placeholder="Phải > 36 tháng để áp dụng Điều 7"></div>'+getRetireAutoHint('ef-conlai');
   } else if(p==='d8k1'){
     tit.textContent='Điều 8 K1 – Thông tin tính chế độ';
     body.innerHTML='<div class="fr"><label>Tổng số tháng đóng BHXH</label><input type="number" id="ef-bhxh" min="0" placeholder="Ví dụ: 180 = 15 năm"></div>';
@@ -354,7 +477,7 @@ function renderEF() {
     var sub=p.slice(-1);
     var isK2=p.indexOf('k2')>-1;
     tit.textContent='Điều '+dieu+' K'+(isK2?'2':'1')+'('+sub+') – Thông tin tính chế độ';
-    var extra=(sub==='b'||sub==='c')?'<div class="fr"><label>Số tháng còn lại đến tuổi hưu (tháng thực tế, không làm tròn)</label><input type="number" id="ef-conlai" min="0" placeholder="'+(sub==='b'?'Phải < 60 tháng':'Phải ≥ 60 tháng')+'"></div>':'';
+    var extra=(sub==='b'||sub==='c')?'<div class="fr"><label>Số tháng còn lại đến tuổi hưu (tháng thực tế, không làm tròn)</label><input type="number" id="ef-conlai" min="0" placeholder="'+(sub==='b'?'Phải < 60 tháng':'Phải ≥ 60 tháng')+'"></div>'+getRetireAutoHint('ef-conlai'):'';
     body.innerHTML=(isK2?'<div class="al al-i">ℹ Áp dụng Khoản 2: tính theo lương CBCC cấp xã trước khi bố trí (nhập ở ô bên trên).</div>':'')
       +'<div class="fr"><label>Tổng số tháng công tác (tháng thực tế, không làm tròn)</label><input type="number" id="ef-ct" min="1" placeholder="Ví dụ: 72 = 6 năm"></div>'
       +extra;
@@ -589,6 +712,11 @@ function clrForm(){
   document.querySelectorAll('input[type=number],input[type=text]').forEach(function(e){e.value='';});
   document.getElementById('f-lcb').value='2340000';
   document.getElementById('sal-prev').textContent='';
+  document.getElementById('f-bmonth').value='';
+  document.getElementById('f-tgbcmonth').value='';
+  document.getElementById('retire-info').style.display='none';
+  window._retireMonthsLeft=null;
+  window._retireResult=null;
   document.getElementById('res').innerHTML='<div class="re"><div style="font-size:38px;margin-bottom:10px">📋</div>Nhập thông tin và bấm <strong>Tính chế độ</strong></div>';
 }
 
@@ -641,6 +769,119 @@ function exportExcel(){
     XLSX.utils.book_append_sheet(wb,ws2,'Tóm tắt');
     XLSX.writeFile(wb,'DanhSach_TGBC_'+today.replace(/\//g,'-')+'.xlsx');
   }catch(e){alert('Lỗi xuất Excel: '+e.message);}
+}
+
+// NĐ 135/2020 – retirement age calculation
+function nd135AgeMonths(retireYear, gender, cond) {
+  if(cond==='nn'){
+    if(gender==='nam'){
+      if(retireYear<=2020) return 55*12;
+      if(retireYear>=2028) return 57*12;
+      return 55*12+3+(retireYear-2021)*3;
+    } else {
+      if(retireYear<=2020) return 50*12;
+      if(retireYear>=2035) return 55*12;
+      return 50*12+4+(retireYear-2021)*4;
+    }
+  } else {
+    if(gender==='nam'){
+      if(retireYear<=2020) return 60*12;
+      if(retireYear>=2028) return 62*12;
+      return 60*12+3+(retireYear-2021)*3;
+    } else {
+      if(retireYear<=2020) return 55*12;
+      if(retireYear>=2035) return 60*12;
+      return 55*12+4+(retireYear-2021)*4;
+    }
+  }
+}
+
+function calcRetirementDate(birthYear, birthMonth, gender, cond) {
+  var birthNum=birthYear*12+(birthMonth-1);
+  var baseAge=(cond==='nn')?(gender==='nam'?57:55):(gender==='nam'?62:60);
+  var estYear=birthYear+baseAge;
+  for(var R=Math.max(2015,estYear-15);R<=estYear+10;R++){
+    var ageM=nd135AgeMonths(R,gender,cond);
+    var retireNum=birthNum+ageM;
+    var retireYear=Math.floor(retireNum/12);
+    var retireMonth=(retireNum%12)+1;
+    if(retireYear===R) return {year:retireYear,month:retireMonth,ageMonths:ageM};
+  }
+  return null;
+}
+
+function calcRetire() {
+  var gender=document.getElementById('f-gender').value;
+  var cond=document.getElementById('f-cond').value;
+  var byear=parseInt(document.getElementById('f-byear').value);
+  var bmonth=parseInt(document.getElementById('f-bmonth').value);
+  var info=document.getElementById('retire-info');
+  if(!byear||!bmonth||isNaN(byear)||isNaN(bmonth)){info.style.display='none';return;}
+  var result=calcRetirementDate(byear,bmonth,gender,cond);
+  if(!result){info.style.display='none';return;}
+  var now=new Date();
+  var tgbcYear=parseInt(document.getElementById('f-tgbcyear').value)||now.getFullYear();
+  var tgbcMonth=parseInt(document.getElementById('f-tgbcmonth').value)||(now.getMonth()+1);
+  var retireNum=result.year*12+(result.month-1);
+  var tgbcNum=tgbcYear*12+(tgbcMonth-1);
+  var ml=retireNum-tgbcNum;
+  window._retireMonthsLeft=ml;
+  window._retireResult=result;
+  var ageY=Math.floor(result.ageMonths/12),ageM=result.ageMonths%12;
+  var ageStr=ageY+' tuổi'+(ageM>0?' '+ageM+' tháng':'');
+  var pl=(cond==='nn')?'Phụ lục II':'Phụ lục I';
+  var mm=String(result.month).padStart(2,'0');
+  var col=ml<0?'#dc2626':(ml<24?'#d97706':'#16a34a');
+  var st=ml<0?'Đã QUA tuổi hưu '+Math.abs(ml)+' tháng':(ml===0?'Đúng tháng nghỉ hưu':'Còn '+ml+' tháng đến tuổi hưu');
+  info.style.display='block';
+  info.innerHTML='<b>'+pl+' – NĐ 135/2020:</b> Tuổi nghỉ hưu <b>'+ageStr+'</b> · Tháng đủ tuổi: <b>'+mm+'/'+result.year+'</b>'
+    +'<br><span style="color:'+col+';font-weight:600">'+st+'</span>';
+}
+
+function getRetireAutoHint(fieldId) {
+  var byear=parseInt((document.getElementById('f-byear')||{}).value);
+  var bmonth=parseInt((document.getElementById('f-bmonth')||{}).value);
+  if(!byear||!bmonth||isNaN(byear)||isNaN(bmonth)) return '';
+  var gender=(document.getElementById('f-gender')||{value:'nam'}).value;
+  var cond=(document.getElementById('f-cond')||{value:'bt'}).value;
+  var result=calcRetirementDate(byear,bmonth,gender,cond);
+  if(!result) return '';
+  var now=new Date();
+  var tgbcYear=parseInt((document.getElementById('f-tgbcyear')||{}).value)||now.getFullYear();
+  var tgbcMonth=parseInt((document.getElementById('f-tgbcmonth')||{}).value)||(now.getMonth()+1);
+  var ml=result.year*12+(result.month-1)-(tgbcYear*12+(tgbcMonth-1));
+  var mm=String(result.month).padStart(2,'0');
+  if(ml<=0) return '<div style="font-size:11px;color:#dc2626;margin:2px 0 6px;padding:4px 8px;background:#fef2f2;border-radius:4px">⚠ NĐ 135/2020: Đã đủ tuổi hưu từ '+mm+'/'+result.year+'</div>';
+  return '<div style="font-size:11px;color:#1d4ed8;margin:2px 0 6px;padding:4px 8px;background:#eff6ff;border-radius:4px;cursor:pointer" onclick="var el=document.getElementById(\''+fieldId+'\');if(el){el.value='+ml+';}">'
+    +'📐 NĐ 135/2020: Còn <b>'+ml+' tháng</b> đến tháng '+mm+'/'+result.year+' → <u>Nhấn để tự điền</u></div>';
+}
+
+function calcT4() {
+  var bm=parseInt(document.getElementById('t4-bm').value);
+  var by=parseInt(document.getElementById('t4-by').value);
+  var g=document.getElementById('t4-g').value;
+  var c=document.getElementById('t4-c').value;
+  var res=document.getElementById('t4-res');
+  if(!bm||!by||isNaN(by)){res.innerHTML='<span style="color:#dc2626">Vui lòng nhập đủ tháng và năm sinh!</span>';return;}
+  var result=calcRetirementDate(by,bm,g,c);
+  if(!result){res.innerHTML='<span style="color:#dc2626">Không tính được!</span>';return;}
+  var ageY=Math.floor(result.ageMonths/12),ageM=result.ageMonths%12;
+  var ageStr=ageY+' tuổi'+(ageM>0?' '+ageM+' tháng':'');
+  var pl=c==='nn'?'Phụ lục II':'Phụ lục I';
+  var gLabel=g==='nam'?'Nam':'Nữ';
+  var now=new Date();
+  var nowNum=now.getFullYear()*12+now.getMonth();
+  var retireNum=result.year*12+(result.month-1);
+  var ml=retireNum-nowNum;
+  var col=ml<0?'#dc2626':(ml<24?'#d97706':'#16a34a');
+  var st=ml<0?'Đã qua tuổi hưu '+Math.abs(ml)+' tháng':'Còn '+ml+' tháng đến tuổi hưu (tính từ '+(now.getMonth()+1)+'/'+now.getFullYear()+')';
+  var mm=String(result.month).padStart(2,'0');
+  res.innerHTML='<div style="padding:10px 12px;background:#f0f9ff;border:1px solid #7dd3fc;border-radius:6px;font-size:13px">'
+    +'<b>'+gLabel+' sinh tháng '+bm+'/'+by+' ('+pl+')</b><br>'
+    +'→ Tuổi nghỉ hưu: <b style="color:#1a3a5c">'+ageStr+'</b><br>'
+    +'→ Tháng đủ tuổi hưu: <b style="color:#1a3a5c">'+mm+'/'+result.year+'</b><br>'
+    +'<span style="color:'+col+';font-weight:600">'+st+'</span>'
+    +'</div>';
 }
 
 function soChuvietnam(n){
