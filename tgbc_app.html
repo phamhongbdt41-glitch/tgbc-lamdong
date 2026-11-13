@@ -112,6 +112,11 @@ tr:nth-child(even) td{background:#f8fafc}
   <button class="tb" onclick="tab('t2',this)">📖 Điều khoản áp dụng</button>
   <button class="tb" onclick="tab('t3',this)">🔢 Công thức tính</button>
   <button class="tb" onclick="tab('t4',this)">🏖 Tuổi hưu NĐ 135</button>
+  <button class="tb" onclick="tab('t5',this)">👥 Theo dõi Nhân sự</button>
+</div>
+<div id="staff-alert-banner" style="display:none;background:#fef9c3;border-bottom:2px solid #fcd34d;padding:7px 20px;font-size:12px;cursor:pointer" onclick="tab('t5',document.querySelectorAll('.tb')[4])">
+  <span id="staff-alert-msg"></span>
+  <span style="float:right;font-size:11px;color:#92400e;font-weight:600">▶ Xem chi tiết Tab Nhân sự</span>
 </div>
 
 <!-- TAB 1 -->
@@ -416,6 +421,57 @@ tr:nth-child(even) td{background:#f8fafc}
 </div>
 </div>
 
+<!-- TAB 5 -->
+<div id="t5" class="wrap hid">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px">
+    <div class="card" style="text-align:center;padding:16px 10px">
+      <div style="font-size:30px;font-weight:800;color:var(--ok)" id="staff-cnt-now">0</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">✅ Đủ điều kiện NGAY</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px 10px">
+      <div style="font-size:30px;font-weight:800;color:var(--warn)" id="staff-cnt-soon">0</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">⏳ Sắp đủ (trong 12 tháng)</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px 10px">
+      <div style="font-size:30px;font-weight:800;color:var(--navy)" id="staff-cnt-total">0</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">👥 Tổng công chức</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">📥 Nhập danh sách công chức (trích ngang)</div>
+    <div class="al al-i" style="margin-bottom:10px;font-size:11px">
+      Tải lên file Excel trích ngang danh sách công chức. Các cột <b>bắt buộc</b>: <b>Họ và tên, Ngày sinh, Giới tính, Tháng BHXH</b>.
+      Cột tùy chọn: Chức vụ, Đơn vị, Điều kiện LĐ (Bình thường/Nặng nhọc), Năm vùng KKK (năm công tác tại vùng KT-XH ĐBKK).
+      <br>Lưu ý: <b>(*)</b> Điều 7 và Điều 8 K2 phụ thuộc thêm điều kiện tổ chức – cần xác nhận thêm. Nhấn <b>Tải mẫu</b> để xem định dạng chuẩn.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <button class="btn btn-p" onclick="document.getElementById('staff-file').click()">📂 Tải lên Excel trích ngang</button>
+      <button class="btn btn-s" onclick="downloadStaffTemplate()">⬇ Tải mẫu Excel</button>
+      <button class="btn btn-s" style="background:#dc2626;color:#fff" onclick="clearStaff()">🗑 Xóa dữ liệu</button>
+    </div>
+    <input type="file" id="staff-file" accept=".xlsx,.xls" style="display:none" onchange="importStaffExcel(this.files[0]);this.value=''">
+    <div id="staff-import-status" style="font-size:12px;color:var(--muted)"></div>
+  </div>
+  <div class="card" id="staff-table-card" style="display:none">
+    <div class="ctit">
+      👥 Danh sách thẩm định nhân sự
+      <span style="float:right">
+        <button class="btn btn-s" style="background:#16a34a;color:#fff;padding:3px 9px;font-size:11px" onclick="exportStaffAlert()">📊 Xuất Excel cảnh báo</button>
+      </span>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
+      <select id="staff-filter" onchange="renderStaffTable()" style="width:auto;padding:5px 9px;font-size:12px">
+        <option value="all">Tất cả</option>
+        <option value="now">✅ Đủ điều kiện NGAY</option>
+        <option value="soon">⏳ Sắp đủ (12 tháng)</option>
+        <option value="no">— Chưa đủ điều kiện</option>
+      </select>
+      <span id="staff-filter-count" style="font-size:12px;color:var(--muted)"></span>
+    </div>
+    <div id="staff-table-wrap" style="overflow-x:auto"></div>
+  </div>
+</div>
+
 <script>
 var S = { ot: 'cbcc', pol: null };
 
@@ -424,6 +480,7 @@ function tab(id, el) {
   document.querySelectorAll('.tb').forEach(function(e){e.classList.remove('on');});
   document.getElementById(id).classList.remove('hid');
   el.classList.add('on');
+  if(id==='t5') renderStaffTab();
 }
 
 var POLS = {
@@ -787,7 +844,7 @@ function clrForm(){
   document.getElementById('res').innerHTML='<div class="re"><div style="font-size:38px;margin-bottom:10px">📋</div>Nhập thông tin và bấm <strong>Tính chế độ</strong></div>';
 }
 
-renderPols();renderEF();renderHist();loadUsername();
+renderPols();renderEF();renderHist();loadUsername();updateAlertBanner();
 
 function loadUsername(){
   fetch('/api/whoami').then(function(r){return r.json();}).then(function(d){
@@ -1154,6 +1211,221 @@ function calcT4() {
     +'→ Tháng đủ tuổi hưu: <b style="color:#1a3a5c">'+mm+'/'+result.year+'</b><br>'
     +'<span style="color:'+col+';font-weight:600">'+st+'</span>'
     +'</div>';
+}
+
+// ============ THEO DÕI NHÂN SỰ TGBC ============
+var STAFF_KEY='tgbc_staff';
+function loadStaff(){try{return JSON.parse(localStorage.getItem(STAFF_KEY)||'[]');}catch(e){return[];}}
+function saveStaff(a){try{localStorage.setItem(STAFF_KEY,JSON.stringify(a));}catch(e){}}
+function clearStaff(){if(!confirm('Xóa toàn bộ dữ liệu danh sách công chức?'))return;localStorage.removeItem(STAFF_KEY);renderStaffTab();updateAlertBanner();}
+
+function findColIdx(hdr,kws){for(var k=0;k<kws.length;k++){var kw=kws[k].toLowerCase();for(var i=0;i<hdr.length;i++){if(hdr[i].toLowerCase().indexOf(kw)>=0)return i;}}return -1;}
+
+function parseDateField(v){
+  if(!v&&v!==0)return null;
+  if(typeof v==='number'&&v>1000){var d=new Date(Math.round((v-25569)*86400000));return{year:d.getUTCFullYear(),month:d.getUTCMonth()+1,day:d.getUTCDate()};}
+  var s=v.toString().trim();
+  var m=s.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/);
+  if(m)return{year:parseInt(m[3]),month:parseInt(m[2]),day:parseInt(m[1])};
+  var m2=s.match(/^(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})$/);
+  if(m2)return{year:parseInt(m2[1]),month:parseInt(m2[2]),day:parseInt(m2[3])};
+  var y=parseInt(s);
+  if(!isNaN(y)&&y>=1940&&y<=2010)return{year:y,month:6,day:1};
+  return null;
+}
+function parseGenderField(v){var s=(v||'').toString().toLowerCase().trim();if(s==='nữ'||s==='nu'||s==='f'||s==='2')return'nu';return'nam';}
+function parseDKLDField(v){var s=(v||'').toString().toLowerCase().trim();if(s.indexOf('nặng')>=0||s.indexOf('nang')>=0||s==='nn'||s.indexOf('0.7')>=0||s.indexOf('0,7')>=0)return'nn';return'bt';}
+
+function parseStaffRows(rows){
+  if(!rows||rows.length<2)return[];
+  var hdr=rows[0].map(function(h){return(h||'').toString().trim();});
+  var hdrL=hdr.map(function(h){return h.toLowerCase();});
+  var cm={
+    ten:findColIdx(hdrL,['họ và tên','họ tên','ho va ten','tên nhân','ten']),
+    ngaySinh:findColIdx(hdrL,['ngày sinh','năm sinh','ngay sinh','nam sinh','sinh']),
+    gioiTinh:findColIdx(hdrL,['giới tính','gioi tinh','gt','gender']),
+    chucVu:findColIdx(hdrL,['chức vụ','chức danh','chuc vu','chuc danh']),
+    donVi:findColIdx(hdrL,['đơn vị','phòng ban','don vi','phong']),
+    dkld:findColIdx(hdrL,['điều kiện lao','dk ld','dkld','nặng nhọc','điều kiện lđ']),
+    namNKKK:findColIdx(hdrL,['năm vùng','năm kkk','nam vung','năm nặng','năm nn','năm đặc biệt']),
+    bhxh:findColIdx(hdrL,['bhxh','tháng bhxh','thang bhxh','tháng bh','so thang'])
+  };
+  var staff=[];
+  for(var i=1;i<rows.length;i++){
+    var row=rows[i];
+    if(!row||row.every(function(c){return!c;}))continue;
+    var ten=cm.ten>=0?(row[cm.ten]||'').toString().trim():'';
+    if(!ten)continue;
+    staff.push({
+      id:i,ten:ten,
+      ngaySinh:parseDateField(cm.ngaySinh>=0?row[cm.ngaySinh]:null),
+      gioiTinh:parseGenderField(cm.gioiTinh>=0?row[cm.gioiTinh]:''),
+      chucVu:cm.chucVu>=0?(row[cm.chucVu]||'').toString().trim():'',
+      donVi:cm.donVi>=0?(row[cm.donVi]||'').toString().trim():'',
+      dkld:parseDKLDField(cm.dkld>=0?row[cm.dkld]:''),
+      namNKKK:parseFloat(cm.namNKKK>=0?row[cm.namNKKK]:0)||0,
+      bhxh:parseInt(cm.bhxh>=0?row[cm.bhxh]:0)||0
+    });
+  }
+  return staff;
+}
+
+function importStaffExcel(file){
+  if(!file)return;
+  var status=document.getElementById('staff-import-status');
+  status.innerHTML='<span style="color:var(--navy)">Đang đọc file...</span>';
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var data=new Uint8Array(e.target.result);
+      var wb=XLSX.read(data,{type:'array'});
+      var ws=wb.Sheets[wb.SheetNames[0]];
+      var rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      var staff=parseStaffRows(rows);
+      saveStaff(staff);
+      status.innerHTML='<span style="color:var(--ok);font-weight:600">✓ Đã nhập '+staff.length+' công chức.</span>';
+      renderStaffTab();
+      updateAlertBanner();
+    }catch(err){status.innerHTML='<span style="color:var(--err)">Lỗi: '+err.message+'</span>';}
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function getPersonEligible(person,monthsAhead){
+  if(!person.ngaySinh)return[];
+  var now=new Date();
+  var totalM=now.getFullYear()*12+now.getMonth()+monthsAhead;
+  var chkYear=Math.floor(totalM/12);
+  var chkMonth=(totalM%12)+1;
+  var ret=calcRetirementDate(person.ngaySinh.year,person.ngaySinh.month,person.gioiTinh,person.dkld);
+  if(!ret)return[];
+  var conlai=ret.year*12+(ret.month-1)-(chkYear*12+(chkMonth-1));
+  var ageM=chkYear*12+(chkMonth-1)-(person.ngaySinh.year*12+(person.ngaySinh.month-1));
+  var tuoi=Math.floor(ageM/12);
+  var bhxh=person.bhxh+monthsAhead;
+  var pols=[];
+  if(person.dkld==='nn'&&person.namNKKK>=15&&bhxh>=180&&conlai>=24&&conlai<=60)pols.push('Đ6K1');
+  if(bhxh>=180&&conlai>=24&&conlai<=60)pols.push('Đ6K2');
+  if(person.dkld==='nn'&&person.namNKKK>=15&&bhxh>=180&&conlai>=1&&conlai<24)pols.push('Đ6K3');
+  if(bhxh>=180&&conlai>=1&&conlai<24)pols.push('Đ6K4');
+  if(conlai>36)pols.push('Đ7(*)');
+  if(tuoi>0&&tuoi<45)pols.push('Đ8K2(*)');
+  return pols;
+}
+
+function classifyPerson(person){
+  var now=getPersonEligible(person,0);
+  if(now.length>0)return{status:'now',pols:now,label:'ĐỦ ĐIỀU KIỆN NGAY'};
+  var soon=getPersonEligible(person,12);
+  if(soon.length>0)return{status:'soon',pols:soon,label:'Sắp đủ (12 tháng)'};
+  return{status:'no',pols:[],label:'Chưa đủ điều kiện'};
+}
+
+function renderStaffTab(){
+  var staff=loadStaff();
+  var cntNow=0,cntSoon=0;
+  var classified=staff.map(function(p){var c=classifyPerson(p);if(c.status==='now')cntNow++;if(c.status==='soon')cntSoon++;return Object.assign({},p,{cls:c});});
+  var el=function(id){return document.getElementById(id);};
+  if(el('staff-cnt-now'))el('staff-cnt-now').textContent=cntNow;
+  if(el('staff-cnt-soon'))el('staff-cnt-soon').textContent=cntSoon;
+  if(el('staff-cnt-total'))el('staff-cnt-total').textContent=staff.length;
+  var card=el('staff-table-card');
+  if(card)card.style.display=staff.length?'block':'none';
+  window._staffClassified=classified;
+  renderStaffTable();
+}
+
+function renderStaffTable(){
+  var filter=(document.getElementById('staff-filter')||{value:'all'}).value;
+  var staff=window._staffClassified||[];
+  var rows=staff.filter(function(p){if(filter==='all')return true;return p.cls.status===filter;});
+  var cntEl=document.getElementById('staff-filter-count');
+  if(cntEl)cntEl.textContent='Hiển thị '+rows.length+' / '+staff.length+' người';
+  var wrap=document.getElementById('staff-table-wrap');
+  if(!wrap)return;
+  if(!rows.length){wrap.innerHTML='<div class="re">Không có dữ liệu phù hợp</div>';return;}
+  var sCol={now:'#16a34a',soon:'#d97706',no:'#6b7280'};
+  var sBg={now:'#d1fae5',soon:'#fef9c3',no:'#f3f4f6'};
+  var html='<table><tr><th>STT</th><th>Họ và tên</th><th>Ngày sinh</th><th>GT</th><th>Chức vụ</th><th>Đơn vị</th><th>BHXH (th)</th><th>Trạng thái</th><th>Chính sách dự kiến</th></tr>';
+  rows.forEach(function(p,i){
+    var ns=p.ngaySinh?(('0'+p.ngaySinh.day).slice(-2)+'/'+('0'+p.ngaySinh.month).slice(-2)+'/'+p.ngaySinh.year):'—';
+    var col=sCol[p.cls.status]||'#6b7280';
+    var bg=sBg[p.cls.status]||'#f3f4f6';
+    var polStr=p.cls.pols.length?p.cls.pols.join(', '):'—';
+    html+='<tr><td style="text-align:center">'+(i+1)+'</td>'
+      +'<td><b>'+p.ten+'</b></td>'
+      +'<td style="white-space:nowrap">'+ns+'</td>'
+      +'<td>'+(p.gioiTinh==='nu'?'Nữ':'Nam')+'</td>'
+      +'<td>'+p.chucVu+'</td>'
+      +'<td>'+p.donVi+'</td>'
+      +'<td style="text-align:center">'+p.bhxh+'</td>'
+      +'<td><span style="background:'+bg+';color:'+col+';font-weight:700;font-size:11px;padding:3px 9px;border-radius:12px;white-space:nowrap">'+p.cls.label+'</span></td>'
+      +'<td style="font-size:11px;color:'+col+';font-weight:600">'+polStr+'</td>'
+      +'</tr>';
+  });
+  html+='</table>';
+  wrap.innerHTML=html;
+}
+
+function updateAlertBanner(){
+  var staff=loadStaff();
+  var banner=document.getElementById('staff-alert-banner');
+  if(!banner)return;
+  if(!staff.length){banner.style.display='none';return;}
+  var cntNow=0,cntSoon=0;
+  staff.forEach(function(p){var c=classifyPerson(p);if(c.status==='now')cntNow++;if(c.status==='soon')cntSoon++;});
+  if(cntNow+cntSoon===0){banner.style.display='none';return;}
+  banner.style.display='block';
+  var msg='';
+  if(cntNow>0)msg+='<b style="color:#065f46">'+cntNow+' người đủ điều kiện TGBC ngay</b>';
+  if(cntNow>0&&cntSoon>0)msg+=' &nbsp;·&nbsp; ';
+  if(cntSoon>0)msg+='<b style="color:#92400e">'+cntSoon+' người sắp đủ điều kiện trong 12 tháng tới</b>';
+  document.getElementById('staff-alert-msg').innerHTML='🔔 '+msg;
+}
+
+function exportStaffAlert(){
+  var staff=window._staffClassified||(loadStaff().map(function(p){return Object.assign({},p,{cls:classifyPerson(p)});}));
+  var alerts=staff.filter(function(p){return p.cls.status!=='no';});
+  if(!alerts.length){alert('Không có trường hợp cần cảnh báo.');return;}
+  try{
+    var wb=XLSX.utils.book_new();
+    var hdr=['STT','Họ và tên','Ngày sinh','Giới tính','Chức vụ','Đơn vị','Tháng BHXH','Trạng thái','Chính sách dự kiến','Ghi chú'];
+    var rows=[hdr];
+    alerts.forEach(function(p,i){
+      var ns=p.ngaySinh?(('0'+p.ngaySinh.day).slice(-2)+'/'+('0'+p.ngaySinh.month).slice(-2)+'/'+p.ngaySinh.year):'';
+      var note=p.cls.pols.some(function(x){return x.indexOf('*')>=0;})?'(*) Điều 7/Đ8K2 cần xác nhận thêm điều kiện tổ chức':'';
+      rows.push([i+1,p.ten,ns,p.gioiTinh==='nu'?'Nữ':'Nam',p.chucVu,p.donVi,p.bhxh,p.cls.label,p.cls.pols.join(', '),note]);
+    });
+    var ws=XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols']=[{wch:5},{wch:25},{wch:12},{wch:8},{wch:20},{wch:25},{wch:10},{wch:22},{wch:30},{wch:35}];
+    XLSX.utils.book_append_sheet(wb,ws,'Cảnh báo TGBC');
+    // Summary sheet
+    var now=new Date();
+    var d=now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear();
+    var sum=[['BÁO CÁO CẢNH BÁO TINH GIẢN BIÊN CHẾ'],['Ngày xuất: '+d],[''],['Tổng số công chức theo dõi:',staff.length],['Đủ điều kiện TGBC ngay:',alerts.filter(function(p){return p.cls.status==='now';}).length],['Sắp đủ điều kiện (12 tháng):',alerts.filter(function(p){return p.cls.status==='soon';}).length],[''],['(*) Điều 7: cần xác nhận thêm điều kiện chuyển sang tổ chức không hưởng KP NSNN'],['(*) Điều 8 K2: cần xác nhận thêm sức khỏe và công việc không phù hợp trình độ']];
+    var ws2=XLSX.utils.aoa_to_sheet(sum);
+    ws2['!cols']=[{wch:40},{wch:30}];
+    XLSX.utils.book_append_sheet(wb,ws2,'Tóm tắt');
+    XLSX.writeFile(wb,'CanhBao_TGBC_'+d.replace(/\//g,'-')+'.xlsx');
+  }catch(e){alert('Lỗi xuất Excel: '+e.message);}
+}
+
+function downloadStaffTemplate(){
+  try{
+    var wb=XLSX.utils.book_new();
+    var data=[
+      ['STT','Họ và tên','Ngày sinh','Giới tính','Chức vụ','Đơn vị','Điều kiện LĐ','Năm vùng KKK','Tháng BHXH'],
+      ['','(Bắt buộc)','(Bắt buộc)','(Bắt buộc)','','','Bình thường/Nặng nhọc','Số năm (0 nếu không)','(Bắt buộc)'],
+      [1,'Nguyễn Văn A','15/06/1970','Nam','Chuyên viên','Phòng TC-HC','Bình thường',0,240],
+      [2,'Trần Thị B','20/03/1975','Nữ','Phó Trưởng phòng','Phòng Dân tộc','Nặng nhọc',16,220],
+      [3,'Lê Văn C','01/09/1980','Nam','Chuyên viên','Phòng Tôn giáo','Bình thường',0,168],
+      [4,'Phạm Thị D','10/12/1985','Nữ','Chuyên viên','Phòng TC-HC','Bình thường',0,120],
+    ];
+    var ws=XLSX.utils.aoa_to_sheet(data);
+    ws['!cols']=[{wch:5},{wch:25},{wch:14},{wch:10},{wch:20},{wch:25},{wch:16},{wch:14},{wch:12}];
+    XLSX.utils.book_append_sheet(wb,ws,'Trích ngang');
+    XLSX.writeFile(wb,'Mau_TrichNgang_TGBC.xlsx');
+  }catch(e){alert('Lỗi: '+e.message);}
 }
 
 function soChuvietnam(n){
