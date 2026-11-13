@@ -423,7 +423,7 @@ tr:nth-child(even) td{background:#f8fafc}
 
 <!-- TAB 5 -->
 <div id="t5" class="wrap hid">
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px">
     <div class="card" style="text-align:center;padding:16px 10px">
       <div style="font-size:30px;font-weight:800;color:var(--ok)" id="staff-cnt-now">0</div>
       <div style="font-size:12px;color:var(--muted);margin-top:3px">✅ Đủ điều kiện NGAY</div>
@@ -433,6 +433,10 @@ tr:nth-child(even) td{background:#f8fafc}
       <div style="font-size:12px;color:var(--muted);margin-top:3px">⏳ Sắp đủ (trong 12 tháng)</div>
     </div>
     <div class="card" style="text-align:center;padding:16px 10px">
+      <div style="font-size:30px;font-weight:800;color:#7c3aed" id="staff-cnt-bhxh">0</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">❓ Cần bổ sung BHXH</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px 10px">
       <div style="font-size:30px;font-weight:800;color:var(--navy)" id="staff-cnt-total">0</div>
       <div style="font-size:12px;color:var(--muted);margin-top:3px">👥 Tổng công chức</div>
     </div>
@@ -440,8 +444,8 @@ tr:nth-child(even) td{background:#f8fafc}
   <div class="card">
     <div class="ctit">📥 Nhập danh sách công chức (trích ngang)</div>
     <div class="al al-i" style="margin-bottom:10px;font-size:11px">
-      Tải lên file Excel trích ngang danh sách công chức. Các cột <b>bắt buộc</b>: <b>Họ và tên, Ngày sinh, Giới tính, Tháng BHXH</b>.
-      Cột tùy chọn: Chức vụ, Đơn vị, Điều kiện LĐ (Bình thường/Nặng nhọc), Năm vùng KKK (năm công tác tại vùng KT-XH ĐBKK).
+      Tải lên file Excel trích ngang danh sách công chức. Cột <b>bắt buộc</b>: <b>Họ và tên, Ngày sinh, Giới tính</b>.
+      Cột tùy chọn: Chức vụ, Đơn vị, Điều kiện LĐ, Năm vùng KKK, <b>Tháng BHXH</b> (để trống nếu chưa có – hệ thống sẽ đánh dấu "Cần bổ sung BHXH" và bạn có thể nhập trực tiếp vào bảng sau khi import).
       <br>Lưu ý: <b>(*)</b> Điều 7 và Điều 8 K2 phụ thuộc thêm điều kiện tổ chức – cần xác nhận thêm. Nhấn <b>Tải mẫu</b> để xem định dạng chuẩn.
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
@@ -464,6 +468,7 @@ tr:nth-child(even) td{background:#f8fafc}
         <option value="all">Tất cả</option>
         <option value="now">✅ Đủ điều kiện NGAY</option>
         <option value="soon">⏳ Sắp đủ (12 tháng)</option>
+        <option value="bhxh">❓ Cần bổ sung BHXH</option>
         <option value="no">— Chưa đủ điều kiện</option>
       </select>
       <span id="staff-filter-count" style="font-size:12px;color:var(--muted)"></span>
@@ -1264,7 +1269,7 @@ function parseStaffRows(rows){
       donVi:cm.donVi>=0?(row[cm.donVi]||'').toString().trim():'',
       dkld:parseDKLDField(cm.dkld>=0?row[cm.dkld]:''),
       namNKKK:parseFloat(cm.namNKKK>=0?row[cm.namNKKK]:0)||0,
-      bhxh:parseInt(cm.bhxh>=0?row[cm.bhxh]:0)||0
+      bhxh:(function(v){var n=parseInt(v);return(isNaN(n)||v===''||v===null||v===undefined)?null:n;})(cm.bhxh>=0?row[cm.bhxh]:null)
     });
   }
   return staff;
@@ -1302,32 +1307,42 @@ function getPersonEligible(person,monthsAhead){
   var conlai=ret.year*12+(ret.month-1)-(chkYear*12+(chkMonth-1));
   var ageM=chkYear*12+(chkMonth-1)-(person.ngaySinh.year*12+(person.ngaySinh.month-1));
   var tuoi=Math.floor(ageM/12);
-  var bhxh=person.bhxh+monthsAhead;
+  var bhxhKnown=(person.bhxh!==null&&person.bhxh!==undefined);
+  var bhxh=bhxhKnown?person.bhxh+monthsAhead:0;
   var pols=[];
-  if(person.dkld==='nn'&&person.namNKKK>=15&&bhxh>=180&&conlai>=24&&conlai<=60)pols.push('Đ6K1');
-  if(bhxh>=180&&conlai>=24&&conlai<=60)pols.push('Đ6K2');
-  if(person.dkld==='nn'&&person.namNKKK>=15&&bhxh>=180&&conlai>=1&&conlai<24)pols.push('Đ6K3');
-  if(bhxh>=180&&conlai>=1&&conlai<24)pols.push('Đ6K4');
+  if(bhxhKnown){
+    if(person.dkld==='nn'&&person.namNKKK>=15&&bhxh>=180&&conlai>=24&&conlai<=60)pols.push('Đ6K1');
+    if(bhxh>=180&&conlai>=24&&conlai<=60)pols.push('Đ6K2');
+    if(person.dkld==='nn'&&person.namNKKK>=15&&bhxh>=180&&conlai>=1&&conlai<24)pols.push('Đ6K3');
+    if(bhxh>=180&&conlai>=1&&conlai<24)pols.push('Đ6K4');
+  } else if(conlai>=1&&conlai<=60){
+    pols.push('Đ6(?)');
+  }
   if(conlai>36)pols.push('Đ7(*)');
   if(tuoi>0&&tuoi<45)pols.push('Đ8K2(*)');
   return pols;
 }
 
 function classifyPerson(person){
-  var now=getPersonEligible(person,0);
-  if(now.length>0)return{status:'now',pols:now,label:'ĐỦ ĐIỀU KIỆN NGAY'};
-  var soon=getPersonEligible(person,12);
-  if(soon.length>0)return{status:'soon',pols:soon,label:'Sắp đủ (12 tháng)'};
-  return{status:'no',pols:[],label:'Chưa đủ điều kiện'};
+  var nowP=getPersonEligible(person,0);
+  var soonP=getPersonEligible(person,12);
+  var nowReal=nowP.filter(function(p){return p!=='Đ6(?)';});
+  var soonReal=soonP.filter(function(p){return p!=='Đ6(?)';});
+  var needsBHXH=(nowP.indexOf('Đ6(?)')>=0||soonP.indexOf('Đ6(?)')>=0);
+  if(nowReal.length>0)return{status:'now',pols:nowReal,label:'ĐỦ ĐIỀU KIỆN NGAY',bhxhWarn:needsBHXH};
+  if(soonReal.length>0)return{status:'soon',pols:soonReal,label:'Sắp đủ (12 tháng)',bhxhWarn:needsBHXH};
+  if(needsBHXH)return{status:'bhxh',pols:['Đ6(?)'],label:'Cần bổ sung BHXH',bhxhWarn:true};
+  return{status:'no',pols:[],label:'Chưa đủ điều kiện',bhxhWarn:false};
 }
 
 function renderStaffTab(){
   var staff=loadStaff();
-  var cntNow=0,cntSoon=0;
-  var classified=staff.map(function(p){var c=classifyPerson(p);if(c.status==='now')cntNow++;if(c.status==='soon')cntSoon++;return Object.assign({},p,{cls:c});});
+  var cntNow=0,cntSoon=0,cntBHXH=0;
+  var classified=staff.map(function(p){var c=classifyPerson(p);if(c.status==='now')cntNow++;else if(c.status==='soon')cntSoon++;else if(c.status==='bhxh')cntBHXH++;return Object.assign({},p,{cls:c});});
   var el=function(id){return document.getElementById(id);};
   if(el('staff-cnt-now'))el('staff-cnt-now').textContent=cntNow;
   if(el('staff-cnt-soon'))el('staff-cnt-soon').textContent=cntSoon;
+  if(el('staff-cnt-bhxh'))el('staff-cnt-bhxh').textContent=cntBHXH;
   if(el('staff-cnt-total'))el('staff-cnt-total').textContent=staff.length;
   var card=el('staff-table-card');
   if(card)card.style.display=staff.length?'block':'none';
@@ -1344,26 +1359,37 @@ function renderStaffTable(){
   var wrap=document.getElementById('staff-table-wrap');
   if(!wrap)return;
   if(!rows.length){wrap.innerHTML='<div class="re">Không có dữ liệu phù hợp</div>';return;}
-  var sCol={now:'#16a34a',soon:'#d97706',no:'#6b7280'};
-  var sBg={now:'#d1fae5',soon:'#fef9c3',no:'#f3f4f6'};
-  var html='<table><tr><th>STT</th><th>Họ và tên</th><th>Ngày sinh</th><th>GT</th><th>Chức vụ</th><th>Đơn vị</th><th>BHXH (th)</th><th>Trạng thái</th><th>Chính sách dự kiến</th></tr>';
+  var sCol={now:'#16a34a',soon:'#d97706',bhxh:'#7c3aed',no:'#6b7280'};
+  var sBg={now:'#d1fae5',soon:'#fef9c3',bhxh:'#ede9fe',no:'#f3f4f6'};
+  var html='<table><tr><th>STT</th><th>Họ và tên</th><th>Ngày sinh</th><th>GT</th><th>Chức vụ</th><th>Đơn vị</th>'
+    +'<th title="Nhấn vào số tháng để chỉnh sửa">BHXH (tháng) ✏️</th><th>Trạng thái</th><th>Chính sách dự kiến</th></tr>';
   rows.forEach(function(p,i){
     var ns=p.ngaySinh?(('0'+p.ngaySinh.day).slice(-2)+'/'+('0'+p.ngaySinh.month).slice(-2)+'/'+p.ngaySinh.year):'—';
     var col=sCol[p.cls.status]||'#6b7280';
     var bg=sBg[p.cls.status]||'#f3f4f6';
     var polStr=p.cls.pols.length?p.cls.pols.join(', '):'—';
+    var bhxhCell;
+    if(p.bhxh===null||p.bhxh===undefined){
+      bhxhCell='<td style="text-align:center">'
+        +'<span style="color:#7c3aed;font-weight:700;cursor:pointer" onclick="editBHXH('+p.id+',\'\')" title="Nhấn để nhập BHXH">— nhập ✏️</span></td>';
+    } else {
+      bhxhCell='<td style="text-align:center">'
+        +'<span style="cursor:pointer" onclick="editBHXH('+p.id+','+p.bhxh+')" title="Nhấn để sửa">'+p.bhxh+' ✏️</span></td>';
+    }
+    var warnBadge=p.cls.bhxhWarn?'<span title="Điều 6 chưa thể kiểm tra do thiếu BHXH" style="color:#7c3aed;font-size:10px;margin-left:4px">+Đ6(?)</span>':'';
     html+='<tr><td style="text-align:center">'+(i+1)+'</td>'
       +'<td><b>'+p.ten+'</b></td>'
       +'<td style="white-space:nowrap">'+ns+'</td>'
       +'<td>'+(p.gioiTinh==='nu'?'Nữ':'Nam')+'</td>'
       +'<td>'+p.chucVu+'</td>'
       +'<td>'+p.donVi+'</td>'
-      +'<td style="text-align:center">'+p.bhxh+'</td>'
-      +'<td><span style="background:'+bg+';color:'+col+';font-weight:700;font-size:11px;padding:3px 9px;border-radius:12px;white-space:nowrap">'+p.cls.label+'</span></td>'
+      +bhxhCell
+      +'<td><span style="background:'+bg+';color:'+col+';font-weight:700;font-size:11px;padding:3px 9px;border-radius:12px;white-space:nowrap">'+p.cls.label+'</span>'+warnBadge+'</td>'
       +'<td style="font-size:11px;color:'+col+';font-weight:600">'+polStr+'</td>'
       +'</tr>';
   });
-  html+='</table>';
+  html+='</table>'
+    +'<div style="margin-top:8px;font-size:11px;color:#7c3aed">✏️ Nhấn vào số tháng BHXH để chỉnh sửa trực tiếp | Đ6(?) = Điều 6 chưa thể thẩm định vì thiếu số tháng BHXH</div>';
   wrap.innerHTML=html;
 }
 
@@ -1372,14 +1398,16 @@ function updateAlertBanner(){
   var banner=document.getElementById('staff-alert-banner');
   if(!banner)return;
   if(!staff.length){banner.style.display='none';return;}
-  var cntNow=0,cntSoon=0;
-  staff.forEach(function(p){var c=classifyPerson(p);if(c.status==='now')cntNow++;if(c.status==='soon')cntSoon++;});
-  if(cntNow+cntSoon===0){banner.style.display='none';return;}
+  var cntNow=0,cntSoon=0,cntBHXH=0;
+  staff.forEach(function(p){var c=classifyPerson(p);if(c.status==='now')cntNow++;else if(c.status==='soon')cntSoon++;else if(c.status==='bhxh')cntBHXH++;});
+  if(cntNow+cntSoon+cntBHXH===0){banner.style.display='none';return;}
   banner.style.display='block';
   var msg='';
   if(cntNow>0)msg+='<b style="color:#065f46">'+cntNow+' người đủ điều kiện TGBC ngay</b>';
   if(cntNow>0&&cntSoon>0)msg+=' &nbsp;·&nbsp; ';
   if(cntSoon>0)msg+='<b style="color:#92400e">'+cntSoon+' người sắp đủ điều kiện trong 12 tháng tới</b>';
+  if((cntNow||cntSoon)&&cntBHXH)msg+=' &nbsp;·&nbsp; ';
+  if(cntBHXH>0)msg+='<b style="color:#7c3aed">'+cntBHXH+' người cần bổ sung số tháng BHXH</b>';
   document.getElementById('staff-alert-msg').innerHTML='🔔 '+msg;
 }
 
@@ -1426,6 +1454,24 @@ function downloadStaffTemplate(){
     XLSX.utils.book_append_sheet(wb,ws,'Trích ngang');
     XLSX.writeFile(wb,'Mau_TrichNgang_TGBC.xlsx');
   }catch(e){alert('Lỗi: '+e.message);}
+}
+
+function editBHXH(personId, curVal){
+  var cur=curVal===null||curVal===undefined||curVal===''?'':curVal;
+  var input=prompt('Nhập số tháng đóng BHXH:\n(Ví dụ: 240 = 20 năm, 180 = 15 năm)',cur);
+  if(input===null)return;
+  input=input.trim();
+  if(input===''){
+    if(!confirm('Để trống = chưa cập nhật BHXH. Xác nhận?'))return;
+    var staff=loadStaff();
+    for(var i=0;i<staff.length;i++){if(staff[i].id===personId){staff[i].bhxh=null;break;}}
+    saveStaff(staff);renderStaffTab();updateAlertBanner();return;
+  }
+  var n=parseInt(input);
+  if(isNaN(n)||n<0||n>600){alert('Số tháng BHXH không hợp lệ (0–600).');return;}
+  var staff=loadStaff();
+  for(var j=0;j<staff.length;j++){if(staff[j].id===personId){staff[j].bhxh=n;break;}}
+  saveStaff(staff);renderStaffTab();updateAlertBanner();
 }
 
 function soChuvietnam(n){
